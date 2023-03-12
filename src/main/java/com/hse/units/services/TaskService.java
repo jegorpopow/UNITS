@@ -26,7 +26,17 @@ public class TaskService {
     }
 
     public void deleteTask(Long id) {
-        tasks.removeIf(task -> task.getId() == id);
+        tasks.removeIf(task -> task.getId().equals(id));
+
+    }
+
+    public Task getTaskById(Long id) {
+        for (Task task : tasks) {
+            if (task.getId().equals(id)) {
+                return task;
+            }
+        }
+        return null;
     }
 
 }
