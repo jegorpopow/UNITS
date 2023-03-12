@@ -1,23 +1,46 @@
 package com.hse.units.entities;
 
-import java.util.Collection;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = User.TABLE_NAME)
 public class User {
-    private Long id;
-    private String username;
-    private String password;
+    public static final String TABLE_NAME = "users";
 
-    Collection<Role> roles;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    long uid;
 
-    public String getUsername(){
-        return username;
+    @Column(unique = true)
+    String name;
+
+    String info;
+
+    protected User() {
     }
 
-    public String getPassword(){
-        return password;
+    public User(String name, String info) {
+        this.name = name;
+        this.info = info;
     }
 
-    public Collection<Role> getRoles() {
-        return roles;
+
+    @Override
+    public String toString() {
+        return String.format("[User UID=%d, name=`%s`, info=`%s`]", uid, name, info);
+    }
+
+    public long getUid() {
+        return uid;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public String getName() {
+        return name;
     }
 }
+
+
