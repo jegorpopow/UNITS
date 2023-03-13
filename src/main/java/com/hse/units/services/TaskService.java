@@ -1,7 +1,6 @@
 package com.hse.units.services;
 
 import com.hse.units.entities.Task;
-import com.hse.units.repositories.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TaskService {
-    private final TaskRepository taskRepository;
+    //private final TaskRepository taskRepository;
 
     private List<Task> tasks = new ArrayList<>();
 

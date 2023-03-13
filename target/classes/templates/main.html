@@ -5,6 +5,14 @@
     <title>Main Page</title>
 
     <p th:text="'Hello, ' + ${name} + '!'"/>
+
+    <hr>
+
+
+    <a href="/tasks"> All tasks </a>
+
+    <br>
+
     <form th:action="@{/logout}" method="post">
         <input type="submit" value="Log Out"/>
     </form>
