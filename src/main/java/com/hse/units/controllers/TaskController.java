@@ -24,7 +24,7 @@ public class TaskController {
     }
 
     @GetMapping("/task/{id}")
-    public String taskInfo(Long id, Model model) {в
+    public String taskInfo(Long id, Model model) {
         model.addAttribute("task", taskService.getTaskById(id));
         return "task";
     }
