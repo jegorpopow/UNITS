@@ -1,5 +1,6 @@
 package com.hse.units.controllers;
 
+import com.hse.units.entities.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

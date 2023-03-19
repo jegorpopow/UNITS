@@ -2,45 +2,89 @@ package com.hse.units.entities;
 
 import jakarta.persistence.*;
 
-@Entity
-@Table(name = User.TABLE_NAME)
-public class User {
-    public static final String TABLE_NAME = "users";
+import java.util.Set;
 
+@Entity // This tells Hibernate to make a table out of this class
+@Table(name = "usr")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    long uid;
+    private Long id;
+    private String username;
+    private String password;
+    private boolean active;
 
-    @Column(unique = true)
-    String name;
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.LAZY)
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
 
-    String info;
-
-    protected User() {
+    public User() {
     }
 
-    public User(String name, String info) {
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public User(String name, String email) {
         this.name = name;
-        this.info = info;
+        this.email = email;
     }
 
+    private String name;
 
-    @Override
-    public String toString() {
-        return String.format("[User UID=%d, name=`%s`, info=`%s`]", uid, name, info);
+    private String email;
+
+    public Long getId() {
+        return id;
     }
 
-    public long getUid() {
-        return uid;
-    }
-
-    public String getInfo() {
-        return info;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
-}
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+}
 

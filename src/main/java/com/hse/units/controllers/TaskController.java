@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.security.Principal;
+
 @Controller
 public class TaskController {
     private final TaskService taskService;
@@ -39,6 +41,11 @@ public class TaskController {
     public String deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
         return "redirect:/";
+    }
+
+    @GetMapping("/tests")
+    public String tests() {
+        return "tests";
     }
 
 }
