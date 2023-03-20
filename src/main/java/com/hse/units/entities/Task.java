@@ -10,10 +10,9 @@ import jakarta.persistence.Id;
  * TODO: add different type of tasks
  * */
 
-@Entity
+
 public class Task {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     private long id;
     private String title;
     private String body;

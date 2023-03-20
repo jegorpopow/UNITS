@@ -17,9 +17,6 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-import javax.sql.DataSource;
-
-
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
