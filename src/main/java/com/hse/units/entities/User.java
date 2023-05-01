@@ -14,6 +14,8 @@ public class User {
     private String password;
     private boolean active;
 
+
+
     //@ElementCollection(targetClass = Role.class, fetch = FetchType.LAZY)
     //@CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     //@Enumerated(EnumType.STRING)
@@ -54,9 +56,9 @@ public class User {
         this.roles = roles;
     }
 
-    public User(String name, String email) {
+    public User(String name, String password) {
         this.name = name;
-        this.email = email;
+        this.email = "example@gmail.com";
     }
 
     private String name;
