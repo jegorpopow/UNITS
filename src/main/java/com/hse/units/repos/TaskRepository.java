@@ -1,8 +1,8 @@
-package ru.units.repos;
+package com.hse.units.repos;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import ru.units.domain.Task;
+import com.hse.units.domain.Task;
 
 import java.util.List;
 

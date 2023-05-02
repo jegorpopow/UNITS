@@ -1,4 +1,4 @@
-package ru.units.domain;
+package com.hse.units.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

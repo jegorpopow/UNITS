@@ -1,14 +1,14 @@
-package ru.units.database;
+package com.hse.units;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import ru.units.domain.Task;
-import ru.units.domain.User;
-import ru.units.repos.TaskRepository;
-import ru.units.repos.UserRepository;
+import com.hse.units.domain.Task;
+import com.hse.units.domain.User;
+import com.hse.units.repos.TaskRepository;
+import com.hse.units.repos.UserRepository;
 
 @SpringBootTest
 class DatabaseApplicationTests {
@@ -64,8 +64,6 @@ class DatabaseApplicationTests {
 
         Assertions.assertEquals(2, iteratorLength(taskRepository.findAll()));
         Assertions.assertTrue(taskRepository.findByAuthor(author.getUid()).get(0).checkCorrectness("otgadka"));
-
-
     }
 
 
