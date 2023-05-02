@@ -57,7 +57,7 @@ public class Task {
                 '}';
     }
 
-    boolean checkCorrectness(String actual) {
-        return actual.equals(answer);
+    boolean checkCorrectness(String receivedAnswer) {
+        return receivedAnswer != null && receivedAnswer.equals(answer);
     }
 }

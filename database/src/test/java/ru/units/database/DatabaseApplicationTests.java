@@ -15,10 +15,10 @@ class DatabaseApplicationTests {
     private TaskRepository taskRepository;
 
 
-    private int iteratorLength(Iterable<User> iterable) {
+    private int iteratorLength(Iterable<?> iterable) {
         int size = 0;
 
-        for (User user : iterable) {
+        for (Object item : iterable) {
             size++;
         }
 
@@ -33,28 +33,34 @@ class DatabaseApplicationTests {
     void TestUserDatabase() {
         userRepository.deleteAll();
 
-        userRepository.save(new User("Jack", "Bauer"));
-        userRepository.save(new User("Chloe", "O'Brian"));
-        userRepository.save(new User("Kim", "Bauer"));
-        userRepository.save(new User("David", "Palmer"));
-        userRepository.save(new User("Michelle", "Dessler"));
+        userRepository.save(new User("Jack", "Bauer", null));
+        userRepository.save(new User("Chloe", "O'Brian", null));
+        userRepository.save(new User("Kim", "Bauer", null));
+        userRepository.save(new User("David", "Palmer", null));
+        userRepository.save(new User("Michelle", "Dessler", null));
 
         Assertions.assertEquals(5, iteratorLength(userRepository.findAll()));
-        Assertions.assertEquals("[User UID=1, name=`Jack`, info=`Bauer`]", userRepository.findByUid(1).toString());
+        Assertions.assertEquals("[[name=`Jack`, info=`Bauer`]]",
+                userRepository.findByName("Jack").toString());
     }
 
     @Test
     void TestTaskDatabase() {
         taskRepository.deleteAll();
 
-        taskRepository.save(new Task());
-        userRepository.save(new User("Chloe", "O'Brian"));
-        userRepository.save(new User("Kim", "Bauer"));
-        userRepository.save(new User("David", "Palmer"));
-        userRepository.save(new User("Michelle", "Dessler"));
+        if (!userRepository.existsUserByName("author")) {
+            userRepository.save(new User("author", "b", "a@a"));
+        }
 
-        Assertions.assertEquals(5, iteratorLength(userRepository.findAll()));
-        Assertions.assertEquals("[User UID=1, name=`Jack`, info=`Bauer`]", userRepository.findByUid(1).toString());
+        User author = userRepository.findUserByName("author");
+
+        taskRepository.save(new Task("Zagadka", "some text", "otgadka", author.getUid()));
+        taskRepository.save(new Task("Zagadka 2", "some text", "otgadka", author.getUid()));
+
+        Assertions.assertEquals(2, iteratorLength(taskRepository.findAll()));
+        Assertions.assertTrue(taskRepository.findByAuthor(author.getUid()).get(0).checkCorrectness("otgadka"));
+
+
     }
 
 

@@ -9,4 +9,8 @@ public interface UserRepository extends CrudRepository<User, Long>, PagingAndSor
     List<User> findByName(String name);
 
     User findByUid(long uid);
+
+    boolean existsUserByName(String name);
+
+    User findUserByName(String name);
 }
