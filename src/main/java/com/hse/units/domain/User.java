@@ -1,4 +1,4 @@
-package ru.units.database;
+package com.hse.units.domain;
 
 import jakarta.persistence.*;
 
@@ -16,18 +16,21 @@ public class User {
 
     String info;
 
+    String email;
+
     protected User() {
     }
 
-    public User(String name, String info) {
+    public User(String name, String info, String email) {
         this.name = name;
         this.info = info;
+        this.email = email;
     }
 
 
     @Override
     public String toString() {
-        return String.format("[User UID=%d, name=`%s`, info=`%s`]", uid, name, info);
+        return String.format("[name=`%s`, info=`%s`]", name, info);
     }
 
     public long getUid() {
@@ -40,6 +43,10 @@ public class User {
 
     public String getName() {
         return name;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }
 
