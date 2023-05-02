@@ -4,6 +4,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import ru.units.domain.Task;
+import ru.units.domain.User;
+import ru.units.repos.TaskRepository;
+import ru.units.repos.UserRepository;
 
 @SpringBootTest
 class DatabaseApplicationTests {

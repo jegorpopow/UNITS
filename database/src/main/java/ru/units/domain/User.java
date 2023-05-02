@@ -1,4 +1,4 @@
-package ru.units.database;
+package ru.units.domain;
 
 import jakarta.persistence.*;
 

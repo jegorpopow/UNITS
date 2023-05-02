@@ -1,4 +1,4 @@
-package ru.units.database;
+package ru.units.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -57,7 +57,7 @@ public class Task {
                 '}';
     }
 
-    boolean checkCorrectness(String receivedAnswer) {
+    public boolean checkCorrectness(String receivedAnswer) {
         return receivedAnswer != null && receivedAnswer.equals(answer);
     }
 }

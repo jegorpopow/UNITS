@@ -1,7 +1,8 @@
-package ru.units.database;
+package ru.units.repos;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import ru.units.domain.User;
 
 import java.util.List;
 
