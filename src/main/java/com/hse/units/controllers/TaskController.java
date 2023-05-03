@@ -1,6 +1,6 @@
 package com.hse.units.controllers;
 
-import com.hse.units.entities.Task;
+import com.hse.units.domain.Task;
 import com.hse.units.services.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

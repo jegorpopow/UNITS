@@ -1,6 +1,6 @@
 package com.hse.units.controllers;
 
-import com.hse.units.entities.User;
+import com.hse.units.domain.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +21,6 @@ public class MainController {
         model.addAttribute("name", principal.getName());
         return "main";
     }
-
 
 
 }

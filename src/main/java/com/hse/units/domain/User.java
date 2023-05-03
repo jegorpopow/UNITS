@@ -33,7 +33,7 @@ public class User {
         return String.format("[name=`%s`, info=`%s`]", name, info);
     }
 
-    public long getUid() {
+    public Long getUid() {
         return uid;
     }
 
