@@ -19,7 +19,7 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    private final UserService userService = new UserService(userRepository);
+    private final UserService userService = new UserService();
 
     @GetMapping("/user")
     public String user(Principal principal) {
