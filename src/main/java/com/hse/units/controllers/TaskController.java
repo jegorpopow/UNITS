@@ -1,10 +1,16 @@
 package com.hse.units.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hse.units.domain.QuickAnswer;
 import com.hse.units.domain.Task;
 import com.hse.units.services.TaskService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+
+import java.security.Principal;
 
 @Controller
 public class TaskController {
@@ -20,15 +26,21 @@ public class TaskController {
         return "tasks";
     }
 
-    @GetMapping("/quickcheck")
-    public @ResponseBody String quickcheck(@RequestParam long taskId, @RequestParam String answer) {
-        Task task = taskService.getTaskById(taskId);
-        if (task == null) {
-            return "{\"status\": \"error\"}";
-        } else if (task.checkCorrectness(answer)) {
-            return "{\"status\": \"success\", \"result\": \"correct\"}";
-        } else {
-            return "{\"status\": \"success\", \"result\": \"wrong\"}";
+    @PostMapping("/quickcheck")
+    public @ResponseBody String quickcheck(@RequestBody String body) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            QuickAnswer answer = objectMapper.readValue(body, QuickAnswer.class);
+            Task task = taskService.getTaskById(answer.getTaskId());
+            if (task == null) {
+                return "{\"status\": \"error\", \"reason\": \"no such task\"}";
+            } else if (task.checkCorrectness(answer.getAnswer())) {
+                return "{\"status\": \"ok\", \"reason\": \"correct\"}";
+            } else {
+                return "{\"status\": \"ok\", \"reason\": \"wrong\"}";
+            }
+        } catch (JsonProcessingException e) {
+            return "{\"status\": \"error\", \"reason\": \"bad request body\"}";
         }
     }
 
