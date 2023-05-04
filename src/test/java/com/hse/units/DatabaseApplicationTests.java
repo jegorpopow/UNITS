@@ -1,5 +1,7 @@
 package com.hse.units;
 
+import com.hse.units.domain.Form;
+import com.hse.units.repos.FormRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ class DatabaseApplicationTests {
 
     @Autowired
     private TaskRepository taskRepository;
+
+    @Autowired
+    private FormRepository formRepository;
 
 
     private int iteratorLength(Iterable<?> iterable) {
@@ -50,6 +55,7 @@ class DatabaseApplicationTests {
 
     @Test
     void TestTaskDatabase() {
+        formRepository.removeMapping();
         taskRepository.deleteAll();
 
         if (!userRepository.existsUserByName("author")) {
@@ -61,9 +67,47 @@ class DatabaseApplicationTests {
         taskRepository.save(new Task("Zagadka", "some text", "otgadka", author.getUid()));
         taskRepository.save(new Task("Zagadka 2", "some text", "otgadka", author.getUid()));
 
-        Assertions.assertEquals(2, iteratorLength(taskRepository.findAll()));
-        Assertions.assertTrue(taskRepository.findByAuthor(author.getUid()).get(0).checkCorrectness("otgadka"));
+        taskRepository.save(new Task("Mock", "jvfhebujrvbne", "1", author.getUid()));
+        taskRepository.save(new Task("Mock", "hdvwrbfu3gbuv", "2", author.getUid()));
+
+        Assertions.assertEquals(4, iteratorLength(taskRepository.findAll()));
+        Assertions.assertTrue(taskRepository.findByTitle("Zagadka").get(0).checkCorrectness("otgadka"));
     }
 
+    @Test
+    void TestSimpleForms() {
+        formRepository.removeMapping();
+        taskRepository.deleteAll();
+        formRepository.deleteAll();
+
+        if (!userRepository.existsUserByName("author")) {
+            userRepository.save(new User("author", "b", "a@a"));
+        }
+
+        User author = userRepository.findUserByName("author");
+
+        taskRepository.save(new Task("Zagadka", "some text", "otgadka", author.getUid()));
+        taskRepository.save(new Task("Zagadka 2", "some text", "otgadka", author.getUid()));
+
+        taskRepository.save(new Task("Mock", "jvfhebujrvbne", "1", author.getUid()));
+        taskRepository.save(new Task("Mock", "hdvwrbfu3gbuv", "2", author.getUid()));
+
+        Form form = new Form("simple test", "Just answer the questions, bro", author.getUid());
+        formRepository.save(form);
+
+        Form result = formRepository.findFormByName("simple test");
+
+        result.addTask(taskRepository.findByTitle("Zagadka").get(0));
+        result.addTasks(taskRepository.findByTitle("Mock"));
+
+        formRepository.save(result);
+
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(3, result.getTasks().size());
+
+        result = formRepository.findFormByName("simple test");
+
+        Assertions.assertTrue(result.getTasks().contains(taskRepository.findByTitle("Zagadka").get(0)));
+    }
 
 }

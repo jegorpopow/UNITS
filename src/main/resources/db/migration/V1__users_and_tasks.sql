@@ -22,5 +22,7 @@ create table users
     email varchar(255),
     primary key (uid)
 );
+
 alter table if exists users
-    add constraint users_unique_names unique (name)
+    add constraint users_unique_names unique (name);
+

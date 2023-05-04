@@ -10,4 +10,6 @@ public interface TaskRepository extends CrudRepository<Task, Long>, PagingAndSor
     List<Task> findByAuthor(long author);
 
     Task findById(long id);
+
+    List<Task> findByTitle(String title);
 }

@@ -15,15 +15,17 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
 
     public boolean createUser(User user) {
-        if (userRepository.existsUserByName(user.getName())) {
+
+        return false;
+      /*  if (userRepository.existsUserByName(user.getName())) {
             return false;
         }
         userRepository.save(user);
-        return true;
+        return true;*/
     }
 
     public User getUserById(Long id) {
-        return userRepository.findByUid(id);
+        return new User("user", "password", null);
     }
 
     @Override
@@ -32,6 +34,7 @@ public class UserService implements UserDetailsService {
     }
 
     public Long findUserByUsername(String name) {
-        return userRepository.findUserByName(name).getUid();
+        return 1L;
+        //return userRepository.findUserByName(name).getUid();
     }
 }

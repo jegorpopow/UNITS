@@ -2,8 +2,10 @@ package com.hse.units.domain;
 
 import jakarta.persistence.*;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = com.hse.units.domain.Form.TABLE_NAME)
@@ -14,10 +16,14 @@ public class Form {
     @GeneratedValue(strategy = GenerationType.AUTO)
     long id;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "form_contains", joinColumns = @JoinColumn(name = "id"))
-    private Set<Long> tasks = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "form_contains",
+            joinColumns = @JoinColumn(name = "form_id"),
+            inverseJoinColumns = @JoinColumn(name = "task_id")
+    )
+    private Set<Task> tasks = new HashSet<>();
     String name;
 
     String info;
@@ -31,7 +37,7 @@ public class Form {
         return id;
     }
 
-    public Set<Long> getTasks() {
+    public Set<Task> getTasks() {
         return tasks;
     }
 
@@ -51,6 +57,14 @@ public class Form {
         this.name = name;
         this.info = info;
         this.creator = creator;
+    }
+
+    public void addTask(Task task) {
+        this.tasks.add(task);
+    }
+
+    public void addTasks(Collection<Task> tasks) {
+        this.tasks.addAll(tasks);
     }
 }
 
