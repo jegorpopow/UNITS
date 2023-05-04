@@ -22,9 +22,10 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/home", "/registration", "/tasks").permitAll()
+                        .requestMatchers("/", "/home", "/registration", "/tasks", "/css/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
@@ -34,6 +35,7 @@ public class WebSecurityConfig {
                 .logout((logout) -> logout.permitAll());
 
         return http.build();
+
     }
 
 

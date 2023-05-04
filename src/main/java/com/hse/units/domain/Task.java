@@ -1,4 +1,4 @@
-package com.hse.units.entities;
+package com.hse.units.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,9 +10,10 @@ import jakarta.persistence.Id;
  * TODO: add different type of tasks
  * */
 
-
+@Entity
 public class Task {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String title;
     private String body;
@@ -23,15 +24,6 @@ public class Task {
     }
 
     public Task(String title, String body, String answer, long author) {
-        this.title = title;
-        this.body = body;
-        this.answer = answer;
-        this.author = author;
-    }
-
-    //temp
-    public Task(Long id, String title, String body, String answer, long author) {
-        this.id = id;
         this.title = title;
         this.body = body;
         this.answer = answer;
@@ -65,7 +57,7 @@ public class Task {
                 '}';
     }
 
-    boolean checkCorrectness(String actual) {
-        return actual.equals(answer);
+    public boolean checkCorrectness(String receivedAnswer) {
+        return receivedAnswer != null && receivedAnswer.equals(answer);
     }
 }

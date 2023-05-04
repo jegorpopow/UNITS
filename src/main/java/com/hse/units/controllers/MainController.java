@@ -1,8 +1,6 @@
 package com.hse.units.controllers;
 
-import com.hse.units.entities.User;
-import com.hse.units.services.UserService;
-import org.springframework.security.core.context.SecurityContext;
+import com.hse.units.domain.User;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
