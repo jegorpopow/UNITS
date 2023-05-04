@@ -11,22 +11,10 @@ import com.hse.units.repos.TaskRepository;
 import com.hse.units.repos.UserRepository;
 
 @SpringBootApplication
-@RestController
 @EnableJpaRepositories("com.hse.units.repos")
-public class DatabaseApplication {
-    @Autowired
-    TaskRepository tasks;
-
-    @Autowired
-    UserRepository users;
-
+public class UNITSApplication {
     public static void main(String[] args) {
-        SpringApplication.run(DatabaseApplication.class, args);
-    }
-
-    @GetMapping("/users")
-    public String users(@RequestParam("uid") long uid) {
-        return users.findByUid(uid).toString();
+        SpringApplication.run(UNITSApplication.class, args);
     }
 
 }
