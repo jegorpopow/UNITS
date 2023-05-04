@@ -24,10 +24,15 @@ import org.springframework.security.web.context.RequestAttributeSecurityContextR
 public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+        http.csrf().disable()
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/home", "/registration", "/tasks", "/css/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/",
+                                "/home",
+                                "/registration",
+                                "/tasks",
+                                "/css/**",
+                                "/quickcheck").permitAll()
+                        .anyRequest().permitAll() // FIX IT!
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")

@@ -2,14 +2,9 @@ package com.hse.units.controllers;
 
 import com.hse.units.domain.Task;
 import com.hse.units.services.TaskService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-
-import java.security.Principal;
 
 @Controller
 public class TaskController {
@@ -23,6 +18,18 @@ public class TaskController {
     public String tasks(Model model) {
         model.addAttribute("tasks", taskService.getTasks());
         return "tasks";
+    }
+
+    @GetMapping("/quickcheck")
+    public @ResponseBody String quickcheck(@RequestParam long taskId, @RequestParam String answer) {
+        Task task = taskService.getTaskById(taskId);
+        if (task == null) {
+            return "{\"status\": \"error\"}";
+        } else if (task.checkCorrectness(answer)) {
+            return "{\"status\": \"success\", \"result\": \"correct\"}";
+        } else {
+            return "{\"status\": \"success\", \"result\": \"wrong\"}";
+        }
     }
 
     @GetMapping("/task/{id}")
