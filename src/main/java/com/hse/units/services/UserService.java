@@ -23,7 +23,8 @@ public class UserService implements UserDetailsService {
     }
 
     public User getUserById(Long id) {
-        return userRepository.findByUid(id);
+        //return userRepository.findByUid(id);
+        return new User("user", "password", null);
     }
 
     @Override
@@ -32,6 +33,7 @@ public class UserService implements UserDetailsService {
     }
 
     public Long findUserByUsername(String name) {
-        return userRepository.findUserByName(name).getUid();
+        //return userRepository.findUserByName(name).getUid();
+        return 1L;
     }
 }
