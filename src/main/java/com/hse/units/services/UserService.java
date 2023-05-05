@@ -1,27 +1,30 @@
 package com.hse.units.services;
 
-import com.hse.units.entities.User;
-import com.hse.units.repositories.UserRepository;
+import com.hse.units.domain.User;
+import com.hse.units.repos.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 
+@Service
 public class UserService implements UserDetailsService {
+    @Autowired
     private UserRepository userRepository;
 
-
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
     public boolean createUser(User user) {
-        return false;
+        if (userRepository.existsUserByName(user.getName())) {
+            return false;
+        }
+        userRepository.save(user);
+        return true;
     }
 
     public User getUserById(Long id) {
-        return new User("user", "password");
+        //return userRepository.findByUid(id);
+        return new User("user", "password", null);
     }
 
     @Override
@@ -30,9 +33,7 @@ public class UserService implements UserDetailsService {
     }
 
     public Long findUserByUsername(String name) {
-
-
-
+        //return userRepository.findUserByName(name).getUid();
         return 1L;
     }
 }

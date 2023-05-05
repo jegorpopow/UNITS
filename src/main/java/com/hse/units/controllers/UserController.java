@@ -1,8 +1,9 @@
 package com.hse.units.controllers;
 
-import com.hse.units.repositories.UserRepository;
-import com.hse.units.entities.User;
+import com.hse.units.repos.UserRepository;
+import com.hse.units.domain.User;
 import com.hse.units.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +16,10 @@ import java.security.Principal;
 @Controller
 public class UserController {
 
+    @Autowired
     private UserRepository userRepository;
-    private UserService userService = new UserService(userRepository);
+
+    private final UserService userService = new UserService();
 
     @GetMapping("/user")
     public String user(Principal principal) {
@@ -41,7 +44,7 @@ public class UserController {
 
     @PostMapping("/registration")
     public String registrationSubmit(@RequestParam String username, @RequestParam String password, Model model) {
-        User user = new User(username, password); //add encryption
+        User user = new User(username, password, null); //add encryption
         //userRepository.addUser(user);
         return "redirect:/login"; //authologin and move to profile/{id}
     }

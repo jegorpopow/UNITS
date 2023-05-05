@@ -1,49 +1,43 @@
 package com.hse.units.services;
 
-import com.hse.units.entities.Task;
+import com.hse.units.domain.Task;
+import com.hse.units.repos.TaskRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
 public class TaskService {
-    //private final TaskRepository taskRepository;
-
-    private List<Task> tasks = new ArrayList<>();
-
-    Long taskId = 0L;
-
-    {
-        tasks.add(new Task(taskId++, "Task0", "this is task 0", "0", 0L));
-        tasks.add(new Task(taskId++,"Task1", "this is task 1", "0", 0L));
-    }
-
+    @Autowired
+    private TaskRepository taskRepository;
 
     public List<Task> getTasks() {
-        return tasks;
+        return StreamSupport.stream(taskRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
     }
 
     public void addTask(Task task) {
-        tasks.add(task);
+        taskRepository.save(task);
     }
 
     public void deleteTask(Long id) {
-        tasks.removeIf(task -> task.getId().equals(id));
-
+        taskRepository.deleteById(id);
     }
 
     public Task getTaskById(Long id) {
-        for (Task task : tasks) {
-            if (task.getId().equals(id)) {
-                return task;
-            }
-        }
-        return null;
+        return taskRepository.findById(id).orElse(null);
+    }
+
+    public Page<Task> findPaginated(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        return this.taskRepository.findAll(pageable);
     }
 
 }
