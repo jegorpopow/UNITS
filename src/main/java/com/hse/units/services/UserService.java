@@ -25,6 +25,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User getUserById(Long id) {
+
         return new User("user", "password", null);
     }
 
@@ -35,6 +36,6 @@ public class UserService implements UserDetailsService {
 
     public Long findUserByUsername(String name) {
         return 1L;
-        //return userRepository.findUserByName(name).getUid();
+
     }
 }
