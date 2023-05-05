@@ -7,11 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Pageable;
 
@@ -48,16 +45,19 @@ public class TaskController {
         return "tasks";
     }
 
-    @GetMapping("/task/{id}")
-    public String taskInfo(@ModelAttribute("answer") String answer, Long id, Model model) {
+    @RequestMapping("/task/{id}")
+    public String taskInfo(@ModelAttribute("answer") String answer, @PathVariable Long id, Model model) {
         ifAuthorized(model);
-        Task task = null; //taskService.getTaskById(id);
+        Task task = taskService.getTaskById(id);
+
         model.addAttribute("task", task);
-        if (answer != null) {
-            //model.addAttribute("correctness", task.checkCorrectness(answer));
+
+        if (answer != null && !answer.equals("")) {
+            model.addAttribute("correctness", task.checkCorrectness(answer));
         }
         return "task";
     }
+
 
     @PostMapping("/task/add")
     public String addTask(Task task) {

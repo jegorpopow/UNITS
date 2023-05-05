@@ -13,14 +13,23 @@
 <body>
 <header th:insert="blocks/header :: header"></header>
 
+<a th:text="${task.body}"/>
 
-<form method="POST" action="/tasks">
+<br>
+
+<form method="POST" th:action="@{/task/{id}(id=${task.getId()})}">
     <label for="answer">Ответ</label>
     <input name="answer" type="text" id="answer"/>
-
     <input type="submit" value="Проверить">
-</form>>
 
+    <div th:if="${correctness != null && correctness}">
+        Правильный ответ
+    </div>
+    <div th:if="${correctness != null && !correctness}">
+        Неправильный ответ
+    </div>
+
+</form>
 
 
 </body>
