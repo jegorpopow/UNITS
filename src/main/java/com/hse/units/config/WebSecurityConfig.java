@@ -16,23 +16,31 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-        http
+        http.csrf().disable()
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/home", "/registration", "/tasks","/**", "/css/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/",
+                                "/home",
+                                "/registration",
+                                "/tasks",
+                                "/css/**",
+                                "/quickcheck").permitAll()
+                        .anyRequest().permitAll() // FIX IT!
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
                         .permitAll()
                 )
-                .logout((logout) -> logout.permitAll());
+                .logout((logout) -> logout.permitAll()).
+                securityContext((securityContext) -> securityContext
+                        .securityContextRepository(new RequestAttributeSecurityContextRepository()));
 
         return http.build();
 

@@ -1,5 +1,8 @@
 package com.hse.units.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hse.units.domain.QuickAnswer;
 import com.hse.units.domain.Task;
 import com.hse.units.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +48,27 @@ public class TaskController {
         return "tasks";
     }
 
+    @PostMapping("/quickcheck")
+    public @ResponseBody String quickcheck(@RequestBody String body) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            QuickAnswer answer = objectMapper.readValue(body, QuickAnswer.class);
+            Task task = taskService.getTaskById(answer.getTaskId());
+            if (task == null) {
+                return "{\"status\": \"error\", \"reason\": \"no such task\"}";
+            } else if (task.checkCorrectness(answer.getAnswer())) {
+                return "{\"status\": \"ok\", \"reason\": \"correct\"}";
+            } else {
+                return "{\"status\": \"ok\", \"reason\": \"wrong\"}";
+            }
+        } catch (JsonProcessingException e) {
+            return "{\"status\": \"error\", \"reason\": \"bad request body\"}";
+        }
+    }
+
+    @GetMapping("/task/{id}")
+    public String taskInfo(Long id, Model model) {
+        model.addAttribute("task", taskService.getTaskById(id));
     @RequestMapping("/task/{id}")
     public String taskInfo(@ModelAttribute("answer") String answer, @PathVariable Long id, Model model) {
         ifAuthorized(model);

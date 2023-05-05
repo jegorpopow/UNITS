@@ -23,6 +23,17 @@ public class Task {
     protected Task() {
     }
 
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Task && ((Task) obj).id == id;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) id;
+    }
+
     public Task(String title, String body, String answer, long author) {
         this.title = title;
         this.body = body;
