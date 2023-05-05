@@ -66,9 +66,6 @@ public class TaskController {
         }
     }
 
-    @GetMapping("/task/{id}")
-    public String taskInfo(Long id, Model model) {
-        model.addAttribute("task", taskService.getTaskById(id));
     @RequestMapping("/task/{id}")
     public String taskInfo(@ModelAttribute("answer") String answer, @PathVariable Long id, Model model) {
         ifAuthorized(model);
@@ -81,7 +78,6 @@ public class TaskController {
         }
         return "task";
     }
-
 
     @PostMapping("/task/add")
     public String addTask(Task task) {
