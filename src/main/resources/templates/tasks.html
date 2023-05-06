@@ -22,29 +22,19 @@
     </div>
 </section>
 
-<!--
-<hr>
-<tr th:each="task : ${tasks}">
-    <td th:text="${task.id}"/> <br>
-    <td th:text="${task.title}"/> <br>
-    <td th:text="${task.body}"/> <hr>
-
-</tr>
--->
 
 <div class="album py-5 bg-light">
+
     <div class="container">
         <div class="row row-cols-1 g-3">
             <div class="col" th:each="task : ${tasks}">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                            additional content. This content is a little bit longer.</p>
+                        <a th:text="${task.body}"/>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                <button type="button" th:onclick="'location.href= \'' + @{/task/{id}(id=${task.getId()})} + '\''" class="btn btn-sm btn-outline-secondary">Подробнее</button>
                             </div>
-                            <a th:text="${task.body}"/>
                             <small class="text-muted">9 mins</small>
                         </div>
                     </div>
@@ -52,6 +42,27 @@
             </div>
         </div>
     </div>
+
+    <div th:if="${pageTotal > 1}">
+        <div class="row col-sm-10">
+            <div class="col-sm-1">
+                    <span th:each="i: ${#numbers.sequence(1, pageTotal)}">
+      <a th:if="${pageNo != i}" th:href="@{'/tasks/' + ${i}}">[[${i}]]</a>
+      <span th:unless="${pageNo != i}">[[${i}]]</span> &nbsp; &nbsp;
+                    </span>
+            </div>
+            <div class="col-sm-1">
+                <a th:if="${pageNo < pageTotal}" th:href="@{'/tasks/' + ${pageNo + 1}}">Next</a>
+                <span th:unless="${pageNo < pageTotal}">Next</span>
+            </div>
+
+            <div class="col-sm-1">
+                <a th:if="${pageNo < pageTotal}" th:href="@{'/tasks/' + ${pageTotal}}">Last</a>
+                <span th:unless="${pageNo < pageTotal}">Last</span>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 </body>
