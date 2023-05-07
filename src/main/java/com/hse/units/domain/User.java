@@ -31,6 +31,10 @@ public class User implements UserDetails {
 
     private String email;
 
+    private String activationCode;
+
+    protected User() {
+    }
     private String password;
     @Enumerated(EnumType.STRING)
     private final Role role = Role.USER; // TODO: process Role
@@ -61,6 +65,14 @@ public class User implements UserDetails {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getActivationCode() {
+        return activationCode;
+    }
+
+    public void setActivationCode(String activationCode) {
+        this.activationCode = activationCode;
     }
 
     @Override

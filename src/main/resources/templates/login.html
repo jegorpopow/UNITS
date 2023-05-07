@@ -13,9 +13,6 @@
 
 <div class="px-4 py-5 my-5 text-center">
 
-
-<div class="container d-flex justify-content-center">
-
     <form th:action="@{/login}" method="post" class="form-signin" >
 
         <div th:if="${param.error}">
@@ -23,6 +20,9 @@
         </div>
         <div th:if="${param.logout}">
             You have been logged out.
+        </div>
+        <div th:if="${message}">
+            <a th:text="${message}"/>
         </div>
 
 
@@ -42,6 +42,8 @@
         </div>
 
     </form>
+
+
 
 </div>
 
