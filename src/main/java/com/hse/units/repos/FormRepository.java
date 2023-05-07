@@ -1,6 +1,8 @@
 package com.hse.units.repos;
 
 import com.hse.units.domain.Form;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -18,6 +20,8 @@ public interface FormRepository extends CrudRepository<Form, Long>, PagingAndSor
 
     Form findFormByName(String name);
 
+
+    Page<Form> findAll(Pageable pageable);
 
     @Modifying
     @Transactional
