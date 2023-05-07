@@ -20,6 +20,7 @@ create table users
     info  varchar(255),
     name  varchar(255),
     email varchar(255),
+    activation_code varchar(255),
     primary key (uid)
 );
 

@@ -18,6 +18,8 @@ public class User {
 
     String email;
 
+    private String activationCode;
+
     protected User() {
     }
 
@@ -47,6 +49,14 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getActivationCode() {
+        return activationCode;
+    }
+
+    public void setActivationCode(String activationCode) {
+        this.activationCode = activationCode;
     }
 }
 

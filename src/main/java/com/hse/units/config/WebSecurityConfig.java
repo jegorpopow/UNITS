@@ -31,6 +31,7 @@ public class WebSecurityConfig {
                                 "/registration",
                                 "/tasks",
                                 "/css/**",
+                                "/activate/*",
                                 "/quickcheck").permitAll()
                         .anyRequest().permitAll() // FIX IT!
                 )

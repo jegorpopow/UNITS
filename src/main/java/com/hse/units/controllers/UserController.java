@@ -16,8 +16,10 @@ import java.security.Principal;
 @Controller
 public class UserController {
 
+    @Autowired
     private UserRepository userRepository;
-    private UserService userService = new UserService();
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/user")
     public String user(Principal principal) {
@@ -35,16 +37,31 @@ public class UserController {
         return "profile";
     }
 
-    @GetMapping("/registration")
-    public String registration() {
+    @PostMapping("/registration")
+    public String registration(@RequestParam() String username, @RequestParam String password, @RequestParam String email, Model model) {
+        User user = new User(username, password, email);
+        if (userService.createUser(user)){
+            return "redirect:/login";
+        }
+        model.addAttribute("message", "Пользователь с таким логином уже существует");
         return "registration";
     }
 
-    @PostMapping("/registration")
-    public String registrationSubmit(@RequestParam String username, @RequestParam String password, Model model) {
-        User user = new User(username, password, null); //add encryption
-        //userRepository.addUser(user);
-        return "redirect:/login"; //authologin and move to profile/{id}
+    @GetMapping("/registration")
+    public String registrationSubmit(Model model) {;
+        return "registration";
+    }
+
+    @GetMapping("/activate/{code}")
+    public String activate(Model model, @PathVariable String code) {
+        boolean isActivated = userService.activateUser(code);
+        if (!isActivated) {
+            model.addAttribute("message", "Пользователь активирован");
+        } else {
+            model.addAttribute("message", "Код активации не найден");
+        }
+
+        return "login";
     }
 
 }

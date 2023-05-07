@@ -14,4 +14,6 @@ public interface UserRepository extends CrudRepository<User, Long>, PagingAndSor
     boolean existsUserByName(String name);
 
     User findUserByName(String name);
+
+    User findByActivationCode(String code);
 }

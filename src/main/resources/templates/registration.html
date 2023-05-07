@@ -8,32 +8,79 @@
 </head>
 
 <body>
-<header th:insert="blocks/header :: header"> </header>
+<header th:insert="blocks/header :: header"></header>
 
-<p>Registration</p>
+<div class="px-4 py-5 my-5">
+    <div class="container d-flex justify-content-center">
 
-<hr>
+        <div class="col-md-7 col-lg-8">
+            <h4 class="mb-3">Регистрация</h4>
+            <form th:action="@{/registration}" method="post"  class="needs-validation" novalidate="">
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <label for="firstName" class="form-label">Имя</label>
+                        <input type="text" class="form-control" id="firstName" placeholder="" value="" required="" name="firstName">
+                        <div class="invalid-feedback">
+                            Необходимо валидное имя
+                        </div>
+                    </div>
 
-<form align="center" action="/registration" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><input type="submit" value="Register"/></div>
-</form>
+                    <div class="col-sm-6">
+                        <label for="lastName" class="form-label">Фамилия</label>
+                        <input type="text" class="form-control" id="lastName" placeholder="" value="" required="" name="lastName">
+                        <div class="invalid-feedback">
+                            Необходима валидная фамилия
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="username" class="form-label">Логин</label>
+                        <div class="input-group has-validation">
+                            <span class="input-group-text">@</span>
+                            <input type="text" class="form-control" id="username" placeholder="Логин" required="" name="username">
+                            <div class="invalid-feedback">
+                                Ваш логин занят
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="you@example.com" name="email">
+                        <div class="invalid-feedback">
+                            Необходим валидный email
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="password" class="form-label">Пароль</label>
+                        <input type="password" class="form-control" id="password" placeholder="Пароль" name="password">
+                        <div class="invalid-feedback">
+                            Необходим валидный пароль
+                        </div>
+                    </div>
 
 
+                </div>
+
+                <!--
+
+                <hr class="my-4">
+
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="same-address">
+                    <label class="form-check-label" for="same-address"> checkbox template </label>
+                </div>
+                -->
 
 
+                <hr class="my-4">
 
-
-
-
-
-
-
-
-
-
-
+                <button class="w-100 btn btn-primary btn-lg" type="submit">Регистрация</button>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 </body>

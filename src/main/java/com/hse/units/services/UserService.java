@@ -7,6 +7,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
+
+import java.util.UUID;
 
 
 @Service
@@ -14,18 +17,34 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    public boolean createUser(User user) {
+    @Autowired
+    private MailSender mailSender;
 
-        return false;
-      /*  if (userRepository.existsUserByName(user.getName())) {
+    public boolean createUser(User user) {
+        if (userRepository.existsUserByName(user.getName())) {
             return false;
         }
+
+        user.setActivationCode(UUID.randomUUID().toString());
+
         userRepository.save(user);
-        return true;*/
+
+        if (!StringUtils.isEmpty(user.getEmail())) {
+            String message = String.format(
+                    "Добро пожаловать, %s! \n" +
+                    "Пожалуйста, подтвердите регистрацию: http://localhost:8080/activate/%s",
+                    user.getName(),
+                    user.getActivationCode()
+            );
+            mailSender.send(user.getEmail(), "Activation code", message);
+
+
+        }
+
+        return true;
     }
 
     public User getUserById(Long id) {
-
         return new User("user", "password", null);
     }
 
@@ -36,6 +55,16 @@ public class UserService implements UserDetailsService {
 
     public Long findUserByUsername(String name) {
         return 1L;
+    }
 
+    public boolean activateUser(String code) {
+        User user = userRepository.findByActivationCode(code);
+        if (user == null) {
+            return false;
+        }
+        user.setActivationCode(null);
+        userRepository.save(user);
+
+        return true;
     }
 }
