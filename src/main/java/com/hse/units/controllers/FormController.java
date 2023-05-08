@@ -35,7 +35,7 @@ public class FormController {
     @GetMapping("/forms")
     public String tasks(Model model, @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         ifAuthorized(model);
-        model.addAttribute("tasks", formService.getForms());
+        model.addAttribute("forms", formService.getForms());
         return findPaginated(1, model);
     }
 

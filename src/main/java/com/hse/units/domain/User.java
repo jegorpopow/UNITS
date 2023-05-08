@@ -27,7 +27,6 @@ public class User {
         this.email = email;
     }
 
-
     @Override
     public String toString() {
         return String.format("[name=`%s`, info=`%s`]", name, info);

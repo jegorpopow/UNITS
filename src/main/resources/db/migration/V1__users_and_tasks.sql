@@ -6,11 +6,12 @@ create sequence users_seq start with 1 increment by 50;
 
 create table task
 (
-    id     bigint not null,
-    answer varchar(255),
-    author bigint not null,
-    body   varchar(255),
-    title  varchar(255),
+    id         bigint  not null,
+    answer     varchar(255),
+    author     bigint  not null,
+    body       varchar(255),
+    standalone boolean not null,
+    title      varchar(255),
     primary key (id)
 );
 

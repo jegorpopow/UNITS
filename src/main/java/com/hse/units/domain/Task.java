@@ -22,6 +22,8 @@ public class Task {
     private String answer;
     private long author;
 
+    private boolean standalone;
+
     protected Task() {
     }
 
@@ -36,11 +38,12 @@ public class Task {
         return (int) id;
     }
 
-    public Task(String title, String body, String answer, long author) {
+    public Task(String title, String body, String answer, long author, boolean standalone) {
         this.title = title;
         this.body = body;
         this.answer = answer;
         this.author = author;
+        this.standalone = standalone;
     }
 
     public Long getId() {
@@ -88,5 +91,9 @@ public class Task {
 
     public Set<TaskTag> getTags() {
         return tags;
+    }
+
+    public boolean isStandalone() {
+        return standalone;
     }
 }

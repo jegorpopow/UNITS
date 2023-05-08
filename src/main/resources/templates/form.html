@@ -15,7 +15,7 @@
         <div class="col-lg-6 col-md-8 mx-auto">
             <h1 class="fw-light" th:text="${form.name}"></h1>
             <p class="lead text-muted" th:text="${form.info}"></p>
-            <p class="lead text-muted" th:text="${'created by ' + form.creator}"></p>
+            <p id="creator" class="lead text-muted" th:text="${'created by ' + form.creator}"></p>
         </div>
     </div>
 </section>
@@ -30,6 +30,16 @@
         </div>
     </div>
 </div>
+
+<section class="py-5 text-center container">
+    <div class="row py-lg-3">
+        <div class="col-lg-6 col-md-8 mx-auto">
+            <p>
+                <a href="#" class="btn btn-mint my-2">Submit</a>
+            </p>
+        </div>
+    </div>
+</section>
 
 </body>
 </html>
