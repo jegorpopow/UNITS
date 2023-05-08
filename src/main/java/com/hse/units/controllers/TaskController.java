@@ -66,6 +66,7 @@ public class TaskController {
         }
     }
 
+
     @RequestMapping("/task/{id}")
     public String taskInfo(@ModelAttribute("answer") String answer, @PathVariable Long id, Model model) {
         ifAuthorized(model);

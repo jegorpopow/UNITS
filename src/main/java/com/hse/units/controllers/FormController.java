@@ -7,6 +7,7 @@ import com.hse.units.domain.QuickAnswer;
 import com.hse.units.domain.Task;
 import com.hse.units.services.FormService;
 import com.hse.units.services.TaskService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -16,7 +17,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class FormController {
@@ -49,13 +52,34 @@ public class FormController {
         return "forms";
     }
 
+    /*
+        @RequestMapping("/form/{id}")
+        public String formInfo(@PathVariable Long id, Model model) {
+            ifAuthorized(model);
+            Form form = formService.getFormById(id);
+
+            model.addAttribute("form", form);
+
+            return "form";
+        }
+    */
     @RequestMapping("/form/{id}")
-    public String taskInfo(@PathVariable Long id, Model model) {
+    public String taskInfo(@PathVariable Long id, HttpServletRequest request, Model model) {
         ifAuthorized(model);
         Form form = formService.getFormById(id);
+        Map<Long, Boolean> correctness = new HashMap<>();
+
+        for (Task task : form.getTasks()) {
+            String answer = request.getParameter("task" + task.getId().toString());
+
+            if (answer != null && !answer.equals("")) {
+                correctness.put(task.getId(), task.checkCorrectness(answer));
+            }
+        }
 
         model.addAttribute("form", form);
-
+        model.addAttribute("correctness", correctness);
         return "form";
     }
+
 }
