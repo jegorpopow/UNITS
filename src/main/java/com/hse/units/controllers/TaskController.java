@@ -57,9 +57,9 @@ public class TaskController {
             if (task == null) {
                 return "{\"status\": \"error\", \"reason\": \"no such task\"}";
             } else if (task.checkCorrectness(answer.getAnswer())) {
-                return "{\"status\": \"ok\", \"reason\": \"correct\"}";
+                return "{\"status\": \"ok\", \"result\": \"correct\"}";
             } else {
-                return "{\"status\": \"ok\", \"reason\": \"wrong\"}";
+                return "{\"status\": \"ok\", \"result\": \"wrong\"}";
             }
         } catch (JsonProcessingException e) {
             return "{\"status\": \"error\", \"reason\": \"bad request body\"}";
