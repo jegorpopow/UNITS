@@ -11,6 +11,7 @@ create table task
     author     bigint  not null,
     body       varchar(255),
     standalone boolean not null,
+    checkable  boolean not null,
     title      varchar(255),
     primary key (id)
 );

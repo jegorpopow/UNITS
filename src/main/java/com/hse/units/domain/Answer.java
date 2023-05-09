@@ -14,16 +14,6 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     long id;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,
-            CascadeType.MERGE,
-            CascadeType.REFRESH})
-    @JoinTable(
-            name = "form_contains",
-            joinColumns = @JoinColumn(name = "form_id"),
-            inverseJoinColumns = @JoinColumn(name = "task_id")
-    )
-    private List<Task> tasks = new ArrayList<>();
-
     @ManyToOne
     User user;
 
@@ -38,6 +28,38 @@ public class Answer {
     Date timestamp;
 
     protected Answer() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public boolean getResult() {
+        return result;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public Answer(User user, Task task, String answer) {
+        this.user = user;
+        this.task = task;
+        this.answer = answer;
+        this.timestamp = new Date();
+        this.result = task.checkCorrectness(answer);
     }
 }
 

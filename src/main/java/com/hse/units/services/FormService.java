@@ -1,8 +1,10 @@
 package com.hse.units.services;
 
 import com.hse.units.domain.Form;
+import com.hse.units.domain.FormResponse;
 import com.hse.units.domain.Task;
 import com.hse.units.repos.FormRepository;
+import com.hse.units.repos.ResponseRepository;
 import com.hse.units.repos.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +23,16 @@ public class FormService {
     @Autowired
     private FormRepository formRepository;
 
+    @Autowired
+    private ResponseRepository responseRepository;
 
     public List<Form> getForms() {
         return StreamSupport.stream(formRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
+    }
+
+    public FormResponse getResponse(long id) {
+        return responseRepository.findById(id);
     }
 
     public Form getFormByName(String name) {

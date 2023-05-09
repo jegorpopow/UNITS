@@ -22,6 +22,8 @@ public class Task {
     private String answer;
     private long author;
 
+    boolean checkable;
+
     private boolean standalone;
 
     protected Task() {
@@ -38,12 +40,13 @@ public class Task {
         return (int) id;
     }
 
-    public Task(String title, String body, String answer, long author, boolean standalone) {
+    public Task(String title, String body, String answer, long author, boolean standalone, boolean checkable) {
         this.title = title;
         this.body = body;
         this.answer = answer;
         this.author = author;
         this.standalone = standalone;
+        this.checkable = checkable;
     }
 
     public Long getId() {
@@ -95,5 +98,13 @@ public class Task {
 
     public boolean isStandalone() {
         return standalone;
+    }
+
+    public long getAuthor() {
+        return author;
+    }
+
+    public boolean isCheckable() {
+        return checkable;
     }
 }

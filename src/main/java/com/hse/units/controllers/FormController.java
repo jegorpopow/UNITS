@@ -2,16 +2,19 @@ package com.hse.units.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hse.units.domain.Form;
-import com.hse.units.domain.QuickAnswer;
-import com.hse.units.domain.Task;
+import com.hse.units.domain.*;
+import com.hse.units.repos.AnswerRepository;
+import com.hse.units.repos.ResponseRepository;
+import com.hse.units.repos.UserRepository;
 import com.hse.units.services.FormService;
 import com.hse.units.services.TaskService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +26,17 @@ import java.util.Map;
 
 @Controller
 public class FormController {
+
+    // TODO : auth
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    AnswerRepository answerRepository;
+
+    @Autowired
+    ResponseRepository responseRepository;
+
     private final FormService formService;
     private final int PAGE_SIZE = 10;
 
@@ -63,6 +77,57 @@ public class FormController {
             return "form";
         }
     */
+
+    @RequestMapping("/form_response/{id}")
+    public String responseInfo(@PathVariable Long id, Model model) {
+        FormResponse response = formService.getResponse(id);
+        model.addAttribute("response", response);
+
+        Map<Task, String> answers = new HashMap<>();
+        Map<Task, Boolean> correctness = new HashMap<>();
+
+        for (Answer answer : response.getAnswers()) {
+            answers.put(answer.getTask(), answer.getAnswer());
+            correctness.put(answer.getTask(), answer.getResult());
+        }
+
+        model.addAttribute("answers", answers);
+        model.addAttribute("correctness", correctness);
+
+        return "response";
+    }
+
+    @RequestMapping("answer_form/{id}")
+    public String formAnswer(@PathVariable Long id, HttpServletRequest request, Model model) {
+        ifAuthorized(model);
+
+        User user = null;
+
+        if (model.containsAttribute("user")) {
+            user = userRepository.findUserByName((String) model.getAttribute("user"));
+        } else {
+            user = userRepository.findUserByName("author");
+        }
+
+        Form form = formService.getFormById(id);
+        FormResponse response = new FormResponse(user, form);
+
+        for (Task task : form.getTasks()) {
+            String rawAnswer = request.getParameter("task" + task.getId().toString());
+
+            if (rawAnswer != null && !rawAnswer.equals("")) {
+                Answer answer = new Answer(user, task, rawAnswer);
+                answerRepository.save(answer);
+                response.addAnswer(answer);
+            }
+        }
+
+        responseRepository.save(response);
+
+        return "redirect:/form_response/{id}";
+    }
+
+
     @RequestMapping("/form/{id}")
     public String taskInfo(@PathVariable Long id, HttpServletRequest request, Model model) {
         ifAuthorized(model);

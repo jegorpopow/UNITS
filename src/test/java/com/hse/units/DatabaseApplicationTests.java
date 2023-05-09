@@ -46,14 +46,14 @@ class DatabaseApplicationTests {
         User author = userRepository.findUserByName("author");
         TaskTag tag = tagRepository.findByName("good task").get(0);
 
-        Task first_task = new Task("Zagadka", "some text", "otgadka", author.getUid(), true);
+        Task first_task = new Task("Zagadka", "some text", "otgadka", author.getUid(), true, true);
         first_task.addTag(tag);
 
         taskRepository.save(first_task);
-        taskRepository.save(new Task("Zagadka 2", "some text", "otgadka", author.getUid(), true));
+        taskRepository.save(new Task("Zagadka 2", "some text", "otgadka", author.getUid(), true, true));
 
-        taskRepository.save(new Task("Mock", "jvfhebujrvbne", "1", author.getUid(), true));
-        taskRepository.save(new Task("Mock", "hdvwrbfu3gbuv", "2", author.getUid(), false));
+        taskRepository.save(new Task("Mock", "jvfhebujrvbne", "1", author.getUid(), true, true));
+        taskRepository.save(new Task("Mock", "hdvwrbfu3gbuv", "2", author.getUid(), false, true));
     }
 
     private int iteratorLength(Iterable<?> iterable) {
