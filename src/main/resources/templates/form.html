@@ -25,7 +25,7 @@
     <div class="container">
         <div class="row row-cols-1 g-3">
             <div class="col" th:each="task : ${form.tasks}">
-                <div th:replace="blocks/standalone_task :: standalone-task"></div>
+                <div th:replace="blocks/inner_task :: inner-task"></div>
             </div>
         </div>
     </div>
@@ -35,7 +35,10 @@
     <div class="row py-lg-3">
         <div class="col-lg-6 col-md-8 mx-auto">
             <p>
-                <a href="#" class="btn btn-mint my-2">Submit</a>
+
+            <form th:id="${'form' + form.id}" method="POST" th:action="@{/answer_form/{id}(id=${form.id})}">
+                <input type="submit" value="Submit" class="btn btn-mint my-2"/>
+            </form>
             </p>
         </div>
     </div>
