@@ -124,26 +124,15 @@ public class FormController {
 
         responseRepository.save(response);
 
-        return "redirect:/form_response/{id}";
+        return "redirect:/form_response/" + response.getId();
     }
 
 
     @RequestMapping("/form/{id}")
-    public String taskInfo(@PathVariable Long id, HttpServletRequest request, Model model) {
+    public String taskInfo(@PathVariable Long id, Model model) {
         ifAuthorized(model);
         Form form = formService.getFormById(id);
-        Map<Long, Boolean> correctness = new HashMap<>();
-
-        for (Task task : form.getTasks()) {
-            String answer = request.getParameter("task" + task.getId().toString());
-
-            if (answer != null && !answer.equals("")) {
-                correctness.put(task.getId(), task.checkCorrectness(answer));
-            }
-        }
-
         model.addAttribute("form", form);
-        model.addAttribute("correctness", correctness);
         return "form";
     }
 

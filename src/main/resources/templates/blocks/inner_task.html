@@ -19,14 +19,6 @@
             <a type="button" class="btn btn-sm btn-outline-secondary" th:each="tag : ${task.tags}">
                 <span th:text="${tag.name}"></span>
             </a>
-
-            <div class="btn btn-mint" th:if="${correctness.get(task.id) != null && correctness.get(task.id)}">
-                Правильный ответ
-            </div>
-            <div class="btn btn-red" th:if="${correctness.get(task.id) != null && !correctness.get(task.id)}">
-                Неправильный ответ
-            </div>
-
         </div>
     </div>
 </div>
