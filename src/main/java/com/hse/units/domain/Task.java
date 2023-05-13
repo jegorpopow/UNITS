@@ -1,9 +1,11 @@
 package com.hse.units.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /*
  * Placeholder for future `Task` class;
@@ -20,6 +22,10 @@ public class Task {
     private String answer;
     private long author;
 
+    boolean checkable;
+
+    private boolean standalone;
+
     protected Task() {
     }
 
@@ -34,11 +40,13 @@ public class Task {
         return (int) id;
     }
 
-    public Task(String title, String body, String answer, long author) {
+    public Task(String title, String body, String answer, long author, boolean standalone, boolean checkable) {
         this.title = title;
         this.body = body;
         this.answer = answer;
         this.author = author;
+        this.standalone = standalone;
+        this.checkable = checkable;
     }
 
     public Long getId() {
@@ -57,6 +65,14 @@ public class Task {
         return answer;
     }
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "tag_by_task",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<TaskTag> tags = new HashSet<>();
+
     @Override
     public String toString() {
         return "Task{" +
@@ -70,5 +86,25 @@ public class Task {
 
     public boolean checkCorrectness(String receivedAnswer) {
         return receivedAnswer != null && receivedAnswer.equals(answer);
+    }
+
+    public void addTag(TaskTag tag) {
+        tags.add(tag);
+    }
+
+    public Set<TaskTag> getTags() {
+        return tags;
+    }
+
+    public boolean isStandalone() {
+        return standalone;
+    }
+
+    public long getAuthor() {
+        return author;
+    }
+
+    public boolean isCheckable() {
+        return checkable;
     }
 }

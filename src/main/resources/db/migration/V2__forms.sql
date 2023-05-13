@@ -4,16 +4,16 @@ create sequence forms_seq start with 1 increment by 50;
 create table form_contains
 (
     form_id bigint not null,
-    task_id bigint not null,
-    primary key (form_id, task_id)
+    task_id bigint not null
 );
 
 create table forms
 (
-    id      bigint not null,
-    creator bigint,
-    info    varchar(255),
-    name    varchar(255),
+    id       bigint  not null,
+    creator  bigint,
+    info     varchar(255),
+    name     varchar(255),
+    shuffled boolean not null,
     primary key (id)
 );
 

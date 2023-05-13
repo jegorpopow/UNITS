@@ -1,7 +1,9 @@
 package com.hse.units;
 
 import com.hse.units.domain.Form;
+import com.hse.units.domain.TaskTag;
 import com.hse.units.repos.FormRepository;
+import com.hse.units.repos.TagRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,8 @@ import com.hse.units.domain.Task;
 import com.hse.units.domain.User;
 import com.hse.units.repos.TaskRepository;
 import com.hse.units.repos.UserRepository;
+
+import java.util.Set;
 
 @SpringBootTest
 class DatabaseApplicationTests {
@@ -23,6 +27,34 @@ class DatabaseApplicationTests {
     @Autowired
     private FormRepository formRepository;
 
+    @Autowired
+    private TagRepository tagRepository;
+
+
+    private void prepareTasks() {
+        formRepository.removeMapping();
+        taskRepository.deleteAll();
+
+        if (!userRepository.existsUserByName("author")) {
+            userRepository.save(new User("author", "b", "a@a"));
+        }
+
+        if (!tagRepository.existsTagByName("good task")) {
+            tagRepository.save(new TaskTag("good task", "just good task"));
+        }
+
+        User author = userRepository.findUserByName("author");
+        TaskTag tag = tagRepository.findByName("good task").get(0);
+
+        Task first_task = new Task("Zagadka", "some text", "otgadka", author.getUid(), true, true);
+        first_task.addTag(tag);
+
+        taskRepository.save(first_task);
+        taskRepository.save(new Task("Zagadka 2", "some text", "otgadka", author.getUid(), true, true));
+
+        taskRepository.save(new Task("Mock", "jvfhebujrvbne", "1", author.getUid(), true, true));
+        taskRepository.save(new Task("Mock", "hdvwrbfu3gbuv", "2", author.getUid(), false, true));
+    }
 
     private int iteratorLength(Iterable<?> iterable) {
         int size = 0;
@@ -55,44 +87,32 @@ class DatabaseApplicationTests {
 
     @Test
     void TestTaskDatabase() {
-        formRepository.removeMapping();
-        taskRepository.deleteAll();
-
-        if (!userRepository.existsUserByName("author")) {
-            userRepository.save(new User("author", "b", "a@a"));
-        }
-
-        User author = userRepository.findUserByName("author");
-
-        taskRepository.save(new Task("Zagadka", "some text", "otgadka", author.getUid()));
-        taskRepository.save(new Task("Zagadka 2", "some text", "otgadka", author.getUid()));
-
-        taskRepository.save(new Task("Mock", "jvfhebujrvbne", "1", author.getUid()));
-        taskRepository.save(new Task("Mock", "hdvwrbfu3gbuv", "2", author.getUid()));
+        prepareTasks();
+        TaskTag tag = tagRepository.findByName("good task").get(0);
 
         Assertions.assertEquals(4, iteratorLength(taskRepository.findAll()));
         Assertions.assertTrue(taskRepository.findByTitle("Zagadka").get(0).checkCorrectness("otgadka"));
+        Assertions.assertEquals(Set.of(tag), taskRepository.findByTitle("Zagadka").get(0).getTags());
+
+        Assertions.assertEquals(1,
+                taskRepository.findTaskByTagsId(tag.getId()).size());
+
+        Assertions.assertEquals(taskRepository.findTaskByTagsId(tag.getId()).get(0),
+                taskRepository.findByTitle("Zagadka").get(0));
+
     }
 
     @Test
     void TestSimpleForms() {
-        formRepository.removeMapping();
-        taskRepository.deleteAll();
+        prepareTasks();
         formRepository.deleteAll();
-
-        if (!userRepository.existsUserByName("author")) {
-            userRepository.save(new User("author", "b", "a@a"));
-        }
 
         User author = userRepository.findUserByName("author");
 
-        taskRepository.save(new Task("Zagadka", "some text", "otgadka", author.getUid()));
-        taskRepository.save(new Task("Zagadka 2", "some text", "otgadka", author.getUid()));
-
-        taskRepository.save(new Task("Mock", "jvfhebujrvbne", "1", author.getUid()));
-        taskRepository.save(new Task("Mock", "hdvwrbfu3gbuv", "2", author.getUid()));
-
-        Form form = new Form("simple test", "Just answer the questions, bro", author.getUid());
+        Form form = new Form("simple test",
+                "Just answer the questions, bro",
+                author.getUid(),
+                false);
         formRepository.save(form);
 
         Form result = formRepository.findFormByName("simple test");
@@ -108,6 +128,8 @@ class DatabaseApplicationTests {
         result = formRepository.findFormByName("simple test");
 
         Assertions.assertTrue(result.getTasks().contains(taskRepository.findByTitle("Zagadka").get(0)));
+        Assertions.assertEquals(result.getTasks().get(0), taskRepository.findByTitle("Zagadka").get(0));
+        Assertions.assertEquals(result.getTasks().get(1).getTitle(), "Mock");
     }
 
 }

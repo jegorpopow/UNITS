@@ -1,0 +1,24 @@
+<div class="card shadow-sm" th:fragment="inner-task">
+    <div class="card-body">
+        <p class="card-text bold align-items-center" th:text="${task.title + ' #' + task.id}"></p>
+        <div class="d-flex justify-content-between align-items-center">
+            <div th:if="${task.standalone == true}" class="btn-group">
+                <a type="button"
+                   th:href="@{/task/{id}(id=${task.id})}"
+                   class="btn btn-sm btn-outline-secondary">
+                    Подробнее
+                </a>
+            </div>
+            <div class="btn-group">
+                <input type="text" th:form="${'form' + form.id}" th:name="${'task' + task.id}"/>
+            </div>
+            <a th:text="${task.body}"/>
+            <small class="text-muted">Content isn't created by UNITS</small>
+        </div>
+        <div class="card-footer">
+            <a type="button" class="btn btn-sm btn-outline-secondary" th:each="tag : ${task.tags}">
+                <span th:text="${tag.name}"></span>
+            </a>
+        </div>
+    </div>
+</div>

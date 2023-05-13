@@ -32,8 +32,9 @@ public class WebSecurityConfig {
                                 "/tasks",
                                 "/css/**",
                                 "/activate/*",
-                                "/quickcheck").permitAll()
-                        .anyRequest().permitAll() // FIX IT!
+                                "/quickcheck",
+                                "/js/**").permitAll()
+                        .anyRequest().permitAll()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")

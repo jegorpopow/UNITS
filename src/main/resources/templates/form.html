@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${form.name}"></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/button.css}">
+
+<body>
+<header th:insert="blocks/header :: header"></header>
+
+
+<section class="py-5 text-center container">
+    <div class="row py-lg-3">
+        <div class="col-lg-6 col-md-8 mx-auto">
+            <h1 class="fw-light" th:text="${form.name}"></h1>
+            <p class="lead text-muted" th:text="${form.info}"></p>
+            <p id="creator" class="lead text-muted" th:text="${'created by ' + form.creator}"></p>
+        </div>
+    </div>
+</section>
+
+
+<div class="album py-5 bg-light">
+    <div class="container">
+        <div class="row row-cols-1 g-3">
+            <div class="col" th:each="task : ${form.tasks}">
+                <div th:replace="blocks/inner_task :: inner-task"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="py-5 text-center container">
+    <div class="row py-lg-3">
+        <div class="col-lg-6 col-md-8 mx-auto">
+            <p>
+
+            <form th:id="${'form' + form.id}" method="POST" th:action="@{/answer_form/{id}(id=${form.id})}">
+                <input type="submit" value="Submit" class="btn btn-mint my-2"/>
+            </form>
+            </p>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

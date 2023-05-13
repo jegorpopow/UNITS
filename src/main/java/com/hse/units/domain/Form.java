@@ -2,9 +2,7 @@ package com.hse.units.domain;
 
 import jakarta.persistence.*;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -17,18 +15,22 @@ public class Form {
     long id;
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,
+            CascadeType.MERGE,
+            CascadeType.REFRESH})
     @JoinTable(
             name = "form_contains",
             joinColumns = @JoinColumn(name = "form_id"),
             inverseJoinColumns = @JoinColumn(name = "task_id")
     )
-    private Set<Task> tasks = new HashSet<>();
+    private List<Task> tasks = new ArrayList<>();
     String name;
 
     String info;
 
     Long creator;
+
+    boolean shuffled;
 
     protected Form() {
     }
@@ -37,8 +39,12 @@ public class Form {
         return id;
     }
 
-    public Set<Task> getTasks() {
-        return tasks;
+    public List<Task> getTasks() {
+        List<Task> result = new ArrayList<>(tasks);
+        if (shuffled) {
+            Collections.shuffle(result);
+        }
+        return result;
     }
 
     public String getName() {
@@ -53,10 +59,11 @@ public class Form {
         return creator;
     }
 
-    public Form(String name, String info, Long creator) {
+    public Form(String name, String info, Long creator, boolean shuffled) {
         this.name = name;
         this.info = info;
         this.creator = creator;
+        this.shuffled = shuffled;
     }
 
     public void addTask(Task task) {
