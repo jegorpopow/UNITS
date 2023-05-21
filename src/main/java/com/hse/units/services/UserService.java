@@ -14,14 +14,15 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    public boolean createUser(User user) {
-
-        return false;
-      /*  if (userRepository.existsUserByName(user.getName())) {
-            return false;
+    public void createUser(User user) {
+        if (isUserExists(user)) {
+            return;
         }
         userRepository.save(user);
-        return true;*/
+    }
+
+    public boolean isUserExists(User user) {
+        return userRepository.existsUserByName(user.getName());
     }
 
     public User getUserById(Long id) {
@@ -36,6 +37,5 @@ public class UserService implements UserDetailsService {
 
     public Long findUserByUsername(String name) {
         return 1L;
-
     }
 }

@@ -17,7 +17,9 @@ import java.security.Principal;
 public class UserController {
 
     private UserRepository userRepository;
-    private UserService userService = new UserService();
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/user")
     public String user(Principal principal) {
@@ -43,8 +45,17 @@ public class UserController {
     @PostMapping("/registration")
     public String registrationSubmit(@RequestParam String username, @RequestParam String password, Model model) {
         User user = new User(username, password, null); //add encryption
-        //userRepository.addUser(user);
+        userService.createUser(user);
         return "redirect:/login"; //authologin and move to profile/{id}
     }
 
+    @PostMapping("/login")
+    public String login(@RequestParam String username, @RequestParam String password, Model model) {
+        User user = new User(username, password, null);
+        if (userService.isUserExists(user)) {
+            return "redirect:/user";
+        } else {
+            return "redirect:/login"; // TODO: throw error
+        }
+    }
 }

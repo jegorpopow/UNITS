@@ -1,22 +1,32 @@
 package com.hse.units.domain;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = User.TABLE_NAME)
-public class User {
+public class User implements UserDetails {
     public static final String TABLE_NAME = "users";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    long uid;
+    private long uid;
 
     @Column(unique = true)
-    String name;
+    private String name;
 
-    String info;
+    private String info;
 
-    String email;
+    private String email;
+
+    private String password;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     protected User() {
     }
@@ -46,6 +56,41 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return name;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
 
