@@ -1,0 +1,2 @@
+package com.hse.units.domain;public class Progress {
+}
