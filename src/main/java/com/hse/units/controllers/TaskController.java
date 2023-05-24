@@ -20,7 +20,7 @@ import java.util.List;
 @Controller
 public class TaskController {
     private final TaskService taskService;
-    private final int PAGE_SIZE = 1;
+    private final int PAGE_SIZE = 5;
 
     public TaskController(TaskService taskService) {
         this.taskService = taskService;
@@ -80,12 +80,12 @@ public class TaskController {
         return "task";
     }
 
-    @GetMapping("/task/add")
+    @GetMapping("/tasks/add")
     public String addTask(Model model) {
         return "task_add";
     }
 
-    @PostMapping("/task/add")
+    @PostMapping("/tasks/add")
     public String addTest(@RequestParam String title, @RequestParam String body, @RequestParam String answer, Model model) {
         Task task = new Task(title, body, answer, 0, true, true);
         taskService.addTask(task);
