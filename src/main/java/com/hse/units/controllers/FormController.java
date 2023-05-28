@@ -1,28 +1,21 @@
 package com.hse.units.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hse.units.domain.*;
-import com.hse.units.repos.AnswerRepository;
-import com.hse.units.repos.ResponseRepository;
-import com.hse.units.repos.UserRepository;
+import com.hse.units.repos.*;
 import com.hse.units.services.FormService;
-import com.hse.units.services.TaskService;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class FormController {
@@ -37,11 +30,25 @@ public class FormController {
     @Autowired
     ResponseRepository responseRepository;
 
+    @Autowired
+    TaskRepository taskRepository;
+
+    @Autowired
+    TagRepository tagRepository;
+
     private final FormService formService;
+
     private final int PAGE_SIZE = 10;
+
+    private FormGenerator formGenerator;
 
     public FormController(FormService formService) {
         this.formService = formService;
+    }
+
+    @PostConstruct
+    public void initializeFormGenerator() {
+        this.formGenerator = new FormGenerator(taskRepository, formService);
     }
 
     private void ifAuthorized(Model model) {
@@ -136,4 +143,33 @@ public class FormController {
         return "form";
     }
 
+    @GetMapping("/generate")
+    public String generateForm(Model model) {
+        return "generate";
+    }
+
+    @RequestMapping("/generate")
+    public String formGenerated(
+            @RequestParam("numberOfTask") int numberOfTask,
+            @RequestParam("level") String level,
+            @RequestParam("tag1") String tag1,
+            @RequestParam("tag2") String tag2,
+            @RequestParam("tag3") String tag3,
+            Model model) {
+
+       List<String> tags = Arrays.asList(tag1, tag2, tag3);
+
+        Set<TaskTag> taskTags = new HashSet<>();
+
+        for (var tag : tags) {
+            if (tag != null && tagRepository.existsTagByName(tag)) {
+                taskTags.addAll(tagRepository.findByName(tag));
+            }
+        }
+
+        User user = userRepository.findUserByName((String) model.getAttribute("user"));
+        Form form = formGenerator.generate(user, numberOfTask, level, taskTags);
+
+        return "redirect:/form/" + form.getId();
+    }
 }

@@ -8,17 +8,22 @@
 <body>
 <header th:insert="blocks/header :: header"></header>
 
-<form action="#" th:action="@{/greeting}" th:object="${greeting}" method="post">
-  <p>Количество заданий <input type="text" th:value="*{numberOfTask}" /></p>
-
+<form action="#" th:action="@{/generate}" method="post">
+  <p>Количество заданий <input type="text" id="numberOfTask" name="numberOfTask" /></p>
   <div class="col-md-6 form-group">
-    <select class="form-control" th:field="*{type}">
+    <select class="form-control" name="level">
       <option value="">Выберете уровень...</option>
       <option value="Easy">Лёгкий</option>
       <option value="Medium">Средний</option>
       <option value="Hard">Сложный</option>
     </select>
   </div>
+
+  <p>Теги </p>
+  <p>Теги можно оставить пустыми, тогда сгенерируется вариант со случайными тегами </p>
+  <p> <input type="text" id="tag1" name="tag1" /></p>
+  <p> <input type="text" id="tag2" name="tag2" /></p>
+  <p> <input type="text" id="tag3" name="tag3" /></p>
 
   <p><input type="submit" value="Submit" /></p>
 </form>

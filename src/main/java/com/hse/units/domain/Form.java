@@ -66,6 +66,10 @@ public class Form {
         this.shuffled = shuffled;
     }
 
+    public Form(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
     public void addTask(Task task) {
         this.tasks.add(task);
     }

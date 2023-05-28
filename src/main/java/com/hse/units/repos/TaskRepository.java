@@ -19,6 +19,8 @@ public interface TaskRepository extends CrudRepository<Task, Long>, PagingAndSor
 
     Page<Task> findAll(Pageable pageable);
 
+    List<Task> findAll();
+
     Task findById(long id);
 
     List<Task> findByTitle(String title);
