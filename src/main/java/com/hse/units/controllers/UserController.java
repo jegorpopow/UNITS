@@ -16,46 +16,5 @@ import java.security.Principal;
 @Controller
 public class UserController {
 
-    private UserRepository userRepository;
 
-    @Autowired
-    private UserService userService;
-
-    @GetMapping("/user")
-    public String user(Principal principal) {
-        if (principal.getName() == null) {
-            return "redirect:/login";
-        }
-        Long userId = userService.findUserByUsername(principal.getName());
-        return "redirect:/user/" + userId;
-    }
-
-    @GetMapping("/user/{id}")
-    public String userProfile(@PathVariable Long id, Model model) {
-        User user = userService.getUserById(id);
-        model.addAttribute("user", user);
-        return "profile";
-    }
-
-    @GetMapping("/registration")
-    public String registration() {
-        return "registration";
-    }
-
-    @PostMapping("/registration")
-    public String registrationSubmit(@RequestParam String username, @RequestParam String password, Model model) {
-        User user = new User(username, password, null); //add encryption
-        userService.createUser(user);
-        return "redirect:/login"; //authologin and move to profile/{id}
-    }
-
-    @PostMapping("/login")
-    public String login(@RequestParam String username, @RequestParam String password, Model model) {
-        User user = new User(username, password, null);
-        if (userService.isUserExists(user)) {
-            return "redirect:/user";
-        } else {
-            return "redirect:/login"; // TODO: throw error
-        }
-    }
 }

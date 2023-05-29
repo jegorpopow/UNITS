@@ -1,6 +1,10 @@
 package com.hse.units.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,6 +12,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = User.TABLE_NAME)
 public class User implements UserDetails {
@@ -26,10 +33,8 @@ public class User implements UserDetails {
 
     private String password;
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private final Role role = Role.USER; // TODO: process Role
 
-    protected User() {
-    }
 
     public User(String name, String info, String email) {
         this.name = name;

@@ -22,6 +22,8 @@ create table users
     info  varchar(255),
     name  varchar(255),
     email varchar(255),
+    password varchar(255),
+    role varchar(255),
     primary key (uid)
 );
 
