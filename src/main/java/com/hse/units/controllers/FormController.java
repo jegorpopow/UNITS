@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -104,9 +105,9 @@ public class FormController {
         User user = null;
 
         if (model.containsAttribute("user")) {
-            user = userRepository.findUserByName((String) model.getAttribute("user"));
+            user = userRepository.findUserByName((String) model.getAttribute("user")).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         } else {
-            user = userRepository.findUserByName("author");
+            user = userRepository.findUserByName("author").orElseThrow(() -> new UsernameNotFoundException("User not found"));
         }
 
         Form form = formService.getFormById(id);
