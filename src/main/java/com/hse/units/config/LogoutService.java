@@ -20,21 +20,20 @@ public class LogoutService implements LogoutHandler {
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        //final String authHeader = request.getHeader("Authorization");
-        //final String jwt;
-
+        if (request.getCookies() == null) {
+            return;
+        }
         final String jwt = Arrays.stream(request.getCookies())
                 .filter(cookie -> cookie.getName().equalsIgnoreCase("jwtAccessToken"))
                 .findFirst().map(Cookie::getValue).orElse(null);
-
         if (jwt == null) {
             return; // TODO: throw smth?
         }
-
+        System.out.println("logout, and jwt is:" + jwt);
         var storedToken = tokenRepository.findByToken(jwt)
                 .orElse(null);
-        System.out.println("logout, and jwt is:" + jwt);
         if (storedToken != null) {
+            System.out.println("set token in db to expired");
             storedToken.setExpired(1);
             storedToken.setRevoked(1);
             tokenRepository.save(storedToken);

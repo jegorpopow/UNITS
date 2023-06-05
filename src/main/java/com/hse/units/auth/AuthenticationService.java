@@ -34,6 +34,9 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
+        if (userRepository.existsUserByName(request.getUsername())) {
+            return null;
+        }
         var user = User.builder()
                 .name(request.getUsername())
                 //.email(request.getEmail())
@@ -80,6 +83,7 @@ public class AuthenticationService {
                 .expired(0)
                 .revoked(0)
                 .build();
+        System.out.println("for user: " + user + " saved token " + jwtToken);
         tokenRepository.save(token);
     }
 

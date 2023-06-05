@@ -47,7 +47,9 @@ public class WebSecurityConfig {
     private static final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(
             new AntPathRequestMatcher ("/login/**"),
             new AntPathRequestMatcher ("/registration/**"),
-            new AntPathRequestMatcher("/")
+            new AntPathRequestMatcher("/"),
+            new AntPathRequestMatcher("/logout"),
+            new AntPathRequestMatcher("/logoutdone")
     );
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -64,9 +66,13 @@ public class WebSecurityConfig {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout()
-                .logoutUrl("/logout") // todo ??
-                .addLogoutHandler(logoutHandler)
-                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
+                //.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/logoutdone")
+                .deleteCookies("jwtAccessToken")
+                .invalidateHttpSession(true)
+                .addLogoutHandler(logoutHandler);
+                //.logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
 
         return http.build();
     }

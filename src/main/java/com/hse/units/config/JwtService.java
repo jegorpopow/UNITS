@@ -24,7 +24,7 @@ public class JwtService {
 
     private final String SECRET_KEY;
     //@Value("${application.security.jwt.expiration}")
-    private final long jwtExpiration = 86400000; // day
+    private final long jwtExpiration = 1800000; // 30 minutes
     //@Value("${application.security.jwt.refresh-token.expiration}")
     private final long refreshExpiration = 604800000; // 7 days
 
