@@ -49,7 +49,8 @@ public class WebSecurityConfig {
             new AntPathRequestMatcher ("/registration/**"),
             new AntPathRequestMatcher("/"),
             new AntPathRequestMatcher("/logout"),
-            new AntPathRequestMatcher("/logoutdone")
+            new AntPathRequestMatcher("/logoutdone"),
+            new AntPathRequestMatcher("/webjars/**")
     );
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
