@@ -18,6 +18,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-rest")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.webjars:bootstrap:5.2.3")
     implementation("org.webjars:jquery:3.6.4")
     implementation("org.webjars:webjars-locator:0.45")
