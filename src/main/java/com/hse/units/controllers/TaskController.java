@@ -32,14 +32,14 @@ public class TaskController {
     }
 
     @GetMapping("/tasks")
-    public String tasks(Model model, @PageableDefault(sort = { "id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+    public String tasks(Model model, @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         ifAuthorized(model);
         model.addAttribute("tasks", taskService.getTasks());
         return findPaginated(1, model);
     }
 
     @GetMapping("/tasks/{pageNo}")
-    public String findPaginated(@PathVariable (value = "pageNo") int pageNo, Model model) {
+    public String findPaginated(@PathVariable(value = "pageNo") int pageNo, Model model) {
         Page<Task> page = taskService.findPaginated(pageNo, PAGE_SIZE);
         List<Task> tasks = page.getContent();
         model.addAttribute("pageNo", pageNo);
@@ -80,10 +80,16 @@ public class TaskController {
         return "task";
     }
 
+    @GetMapping("/task/add")
+    public String addTask(Model model) {
+        return "task_add";
+    }
+
     @PostMapping("/task/add")
-    public String addTask(Task task) {
+    public String addTest(@RequestParam String title, @RequestParam String body, @RequestParam String answer, Model model) {
+        Task task = new Task(title, body, answer, 0, true, true);
         taskService.addTask(task);
-        return "redirect:/";
+        return "redirect:/tasks";
     }
 
     @PostMapping("/task/delete/{id}")
@@ -97,5 +103,6 @@ public class TaskController {
         ifAuthorized(model);
         return "tests";
     }
+
 
 }

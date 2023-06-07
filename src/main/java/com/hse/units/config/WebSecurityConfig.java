@@ -45,24 +45,25 @@ public class WebSecurityConfig {
     private final LogoutHandler logoutHandler;
 
     private static final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(
-            new AntPathRequestMatcher ("/login/**"),
-            new AntPathRequestMatcher ("/registration/**"),
+            new AntPathRequestMatcher("/login/**"),
+            new AntPathRequestMatcher("/registration/**"),
             new AntPathRequestMatcher("/"),
             new AntPathRequestMatcher("/logout"),
             new AntPathRequestMatcher("/logoutdone"),
             new AntPathRequestMatcher("/webjars/**")
     );
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers(PUBLIC_URLS)
-                    .permitAll()
+                .permitAll()
                 .anyRequest()
-                    .authenticated()
+                .authenticated()
                 .and()
-                    .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // todo: stateless or smth else?
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // todo: stateless or smth else?
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -73,7 +74,7 @@ public class WebSecurityConfig {
                 .deleteCookies("jwtAccessToken")
                 .invalidateHttpSession(true)
                 .addLogoutHandler(logoutHandler);
-                //.logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
+        //.logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
 
         return http.build();
     }
@@ -90,5 +91,4 @@ public class WebSecurityConfig {
 
         return new InMemoryUserDetailsManager(user);
     }*/
-
 }

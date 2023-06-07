@@ -16,5 +16,36 @@ import java.security.Principal;
 @Controller
 public class UserController {
 
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
 
+    @GetMapping("/user")
+    public String user(Principal principal) {
+        if (principal.getName() == null) {
+            return "redirect:/login";
+        }
+        Long userId = userService.findUserByUsername(principal.getName());
+        return "redirect:/user/" + userId;
+    }
+
+    @GetMapping("/user/{id}")
+    public String userProfile(@PathVariable Long id, Model model) {
+        User user = userService.getUserById(id);
+        model.addAttribute("user", user);
+        return "profile";
+    }
+
+    @GetMapping("/activate/{code}")
+    public String activate(Model model, @PathVariable String code) {
+        boolean isActivated = userService.activateUser(code);
+        if (!isActivated) {
+            model.addAttribute("message", "Пользователь активирован");
+        } else {
+            model.addAttribute("message", "Код активации не найден");
+        }
+
+        return "login";
+    }
 }

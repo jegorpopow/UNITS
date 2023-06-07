@@ -16,6 +16,7 @@
             <h1 class="fw-light">Открытый банк заданий</h1>
             <p class="lead text-muted">Что-то умное с описанием</p>
             <p>
+                <button type="button" onclick="location.href='task/add'" class="btn btn-mint my-2">Добавить задание</button>
                 <a href="#" class="btn btn-mint my-2">Добавить задание</a>
             </p>
         </div>
@@ -28,7 +29,16 @@
     <div class="container">
         <div class="row row-cols-1 g-3">
             <div class="col" th:each="task : ${tasks}">
-                <div th:replace="blocks/standalone_task :: standalone-task"></div>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <a th:text="${task.body}"/>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" th:onclick="'location.href= \'' + @{/task/{id}(id=${task.getId()})} + '\''" class="btn btn-sm btn-outline-secondary">Подробнее</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -56,4 +66,3 @@
 </div>
 
 </body>
-</html>
