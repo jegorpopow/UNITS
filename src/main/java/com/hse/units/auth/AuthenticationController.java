@@ -40,22 +40,6 @@ public class AuthenticationController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/user")
-    public String user(Principal principal) {
-        if (principal.getName() == null) {
-            return "redirect:/login";
-        }
-        Long userId = userService.findUserByUsername(principal.getName());
-        return "redirect:/user/" + userId;
-    }
-
-    @GetMapping("/user/{id}")
-    public String userProfile(@PathVariable Long id, Model model) {
-        User user = userService.getUserById(id);
-        model.addAttribute("user", user);
-        return "profile";
-    }
-
     private boolean isAlreadyAuthorized(HttpServletRequest request) {
         final String jwt = Arrays.stream(request.getCookies())
                 .filter(cookie -> cookie.getName().equalsIgnoreCase("jwtAccessToken"))

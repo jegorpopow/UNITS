@@ -33,8 +33,6 @@ public class User implements UserDetails {
 
     private String activationCode;
 
-    protected User() {
-    }
     private String password;
     @Enumerated(EnumType.STRING)
     private final Role role = Role.USER; // TODO: process Role
