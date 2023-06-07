@@ -30,4 +30,3 @@ create table users
 
 alter table if exists users
     add constraint users_unique_names unique (name);
-
