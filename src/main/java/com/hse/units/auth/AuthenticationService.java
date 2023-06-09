@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hse.units.config.JwtService;
 import com.hse.units.domain.User;
 import com.hse.units.repos.UserRepository;
+import com.hse.units.services.UserService;
 import com.hse.units.token.Token;
 import com.hse.units.repos.TokenRepository;
 import com.hse.units.token.TokenType;
@@ -32,11 +33,9 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final UserService userService;
 
     public AuthenticationResponse register(RegisterRequest request) {
-        if (userRepository.existsUserByName(request.getUsername())) {
-            return null;
-        }
         var user = User.builder()
                 .name(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -44,10 +43,13 @@ public class AuthenticationService {
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .build();
-        var savedUser = userRepository.save(user);
+
+        if (!userService.createUser(user)) {
+            return null;
+        }
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
-        saveUserToken(savedUser, jwtToken);
+        saveUserToken(user, jwtToken);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)

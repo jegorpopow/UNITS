@@ -4,6 +4,7 @@ import com.hse.units.config.JwtService;
 import com.hse.units.config.LogoutService;
 import com.hse.units.domain.User;
 import com.hse.units.repos.TokenRepository;
+import com.hse.units.services.MailSender;
 import com.hse.units.services.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.util.Arrays;
+import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
@@ -75,6 +77,8 @@ public class AuthenticationController {
         cookie.setAttribute("jwtRefreshToken", get.getRefreshToken());
         cookie.setMaxAge(60 * 60); // 1 hour
         response.addCookie(cookie);
+
+
 
         return new ModelAndView("redirect:/user");
         //return ResponseEntity.ok(service.register(request));
