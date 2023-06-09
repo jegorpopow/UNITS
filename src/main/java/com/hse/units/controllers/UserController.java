@@ -37,21 +37,6 @@ public class UserController {
         return "profile";
     }
 
-    @PostMapping("/registration")
-    public String registration(@RequestParam() String username, @RequestParam String password, @RequestParam String email, Model model) {
-        User user = new User(username, password, email);
-        if (userService.createUser(user)){
-            return "redirect:/login";
-        }
-        model.addAttribute("message", "Пользователь с таким логином уже существует");
-        return "registration";
-    }
-
-    @GetMapping("/registration")
-    public String registrationSubmit(Model model) {;
-        return "registration";
-    }
-
     @GetMapping("/activate/{code}")
     public String activate(Model model, @PathVariable String code) {
         boolean isActivated = userService.activateUser(code);
@@ -63,5 +48,4 @@ public class UserController {
 
         return "login";
     }
-
 }

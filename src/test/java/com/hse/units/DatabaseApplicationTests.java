@@ -12,6 +12,7 @@ import com.hse.units.domain.Task;
 import com.hse.units.domain.User;
 import com.hse.units.repos.TaskRepository;
 import com.hse.units.repos.UserRepository;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Set;
 
@@ -43,7 +44,7 @@ class DatabaseApplicationTests {
             tagRepository.save(new TaskTag("good task", "just good task"));
         }
 
-        User author = userRepository.findUserByName("author");
+        User author = userRepository.findUserByName("author").orElseThrow(() -> new UsernameNotFoundException("User not found"));
         TaskTag tag = tagRepository.findByName("good task").get(0);
 
         Task first_task = new Task("Zagadka", "some text", "otgadka", author.getUid(), true, true);
@@ -107,7 +108,7 @@ class DatabaseApplicationTests {
         prepareTasks();
         formRepository.deleteAll();
 
-        User author = userRepository.findUserByName("author");
+        User author = userRepository.findUserByName("author").orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         Form form = new Form("simple test",
                 "Just answer the questions, bro",

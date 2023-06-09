@@ -23,9 +23,10 @@ create table users
     name  varchar(255),
     email varchar(255),
     activation_code varchar(255),
+    password varchar(255),
+    role varchar(255),
     primary key (uid)
 );
 
 alter table if exists users
     add constraint users_unique_names unique (name);
-

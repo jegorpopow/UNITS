@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Spring Boot Thymeleaf Application - Bootstrap Countdown</title>
+
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.3/css/bootstrap.min.css} "/>
+    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/6.3.0/css/all.css} "/>
+    <link th:rel="stylesheet" th:href="@{/assets/styles/custom.css} "/>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 mt-5">
+            <div class="rounded bg-gradient text-white shadow p-5 text-center mb-5">
+                <p class="mb-0 font-weight-bold text-uppercase">We'll open in</p>
+                <div id="clock" class="countdown pt-4"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/assets/jquery-countdown/jquery.countdown.min.js}"></script>
+
+<script th:inline="javascript">
+    var endDate = [[${#calendars.format(endDate,'yyyy/MM/dd HH:mm:ss')}]];
+
+    $('#clock').countdown(endDate).on('update.countdown', function (event) {
+        /*var $this = $(this).html(event.strftime(''
+            + '<span class="h1 font-weight-bold">%D</span> Day%!d'
+            + '<span class="h1 font-weight-bold">%H</span> Hr'
+            + '<span class="h1 font-weight-bold">%M</span> Min'
+            + '<span class="h1 font-weight-bold">%S</span> Sec'));*/
+        var $this = $(this);
+        $this.html(event.strftime('To end: <span>%H:%M:%S</span>'));
+    }).on('finish.countdown', function (event) {
+        window.location.href = "/login";
+        // todo: in each html there will be handler what we should do after timer is elapsed
+    });
+</script>
+
+</body>
+</html>

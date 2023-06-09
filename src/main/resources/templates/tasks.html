@@ -28,8 +28,6 @@
     <div class="container">
         <div class="row row-cols-1 g-3">
             <div class="col" th:each="task : ${tasks}">
-
-                <!--
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <a th:text="${task.body}"/>
@@ -40,10 +38,6 @@
                         </div>
                     </div>
                 </div>
-                -->
-
-                <div th:replace="blocks/standalone_task :: standalone-task"></div>
-
             </div>
         </div>
     </div>
@@ -71,4 +65,3 @@
 </div>
 
 </body>
-</html>
