@@ -54,6 +54,7 @@ public class FormController {
 
     private void ifAuthorized(Model model) {
         String login = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println("ifAuthorized: " + login);
         model.addAttribute("user", login);
     }
 
@@ -149,7 +150,7 @@ public class FormController {
         return "generate";
     }
 
-    @RequestMapping("/generate")
+    @PostMapping("/generate")
     public String formGenerated(
             @RequestParam("numberOfTask") int numberOfTask,
             @RequestParam("level") String level,
@@ -158,6 +159,7 @@ public class FormController {
             @RequestParam("tag3") String tag3,
             Model model) {
 
+        ifAuthorized(model);
        List<String> tags = Arrays.asList(tag1, tag2, tag3);
 
         Set<TaskTag> taskTags = new HashSet<>();
@@ -168,7 +170,7 @@ public class FormController {
             }
         }
 
-        User user = userRepository.findUserByName((String) model.getAttribute("user"));
+        User user = userRepository.findUserByName((String) model.getAttribute("user")).orElseThrow();
         Form form = formGenerator.generate(user, numberOfTask, level, taskTags);
 
         return "redirect:/form/" + form.getId();
