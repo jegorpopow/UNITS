@@ -19,6 +19,10 @@
                     <button type="button" onclick="location.href='tests/add'" class="btn btn-mint my-2">Создать новый тест</button>
                     <a href="#" class="btn btn-primary my-2">Создать новый тест</a>
                 </p>
+                <p>
+                    <button type="button" onclick="location.href='tests/add'" class="btn btn-mint my-2">Создать новый тест</button>
+                    <a href="#" class="btn btn-primary my-2">Сгенерировать индивидуальный тест</a>
+                </p>
             </div>
         </div>
     </section>
@@ -29,6 +33,7 @@
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col" th:each="form : ${forms}">
                     <div class="card shadow-sm">
+                        <!--
                         <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
                              xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
                              preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
@@ -36,6 +41,7 @@
                             <text x="50%" y="50%" fill="#eceeef" dy=".3em"> Добивим возможность вставлять картинки?
                             </text>
                         </svg>
+                        -->
                         <div class="card-header justify-content-between align-items-center">
                             <p class="center" th:text="${form.name}"></p>
                             <a th:href="@{/form/{id}(id=${form.id})}" class="btn btn-lg btn-primary btn-block">

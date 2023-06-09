@@ -9,10 +9,12 @@
 <header th:insert="blocks/header :: header"> </header>
 
 <div class="container mt-5 ">
-    <form action="/task/add" method="post">
+    <h1 class="fw-light">Добавить задание</h1>
+    <form action="tasks/add" method="post">
         <input type="text" name="title" placeholder="Введите название задания" class="form-control"><br>
-        <textarea name="body" placeholder="Введите текст названия" class="form-control"></textarea><br>
-        <input type="text" name="answer" placeholder="ВВедите название задачи" class="form-control"><br><button type="submit" class="btn btn success">Добавить задание </button>
+        <textarea name="body" placeholder="Введите текст задания" class="form-control"></textarea><br>
+        <input type="text" name="answer" placeholder="Введите ответ на задание" class="form-control"><br>
+        <button type="submit" class="btn btn-mint my-2 success">Добавить задание </button>
     </form>
 </div>
 
