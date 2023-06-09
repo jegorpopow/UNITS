@@ -64,8 +64,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/registration")
-    public ModelAndView register(@RequestParam String username, @RequestParam String password, HttpServletResponse response) {
-        var get = authenticationService.register(new RegisterRequest(username, password));
+    public ModelAndView register(@RequestParam String username, @RequestParam String password,
+                                 @RequestParam String firstName, @RequestParam String lastName,
+                                 @RequestParam String email, HttpServletResponse response) {
+        var get = authenticationService.register(new RegisterRequest(username, password, firstName, lastName, email));
         if (get == null) {
             return new ModelAndView("/registration").addObject("param", "error"); // todo
         }
