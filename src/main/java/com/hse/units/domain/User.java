@@ -39,9 +39,6 @@ public class User implements UserDetails {
     private String activationCode;
 
     private String password;
-    @Enumerated(EnumType.STRING)
-    private final Role role = Role.USER; // TODO: process Role
-
 
     public User(String name, String info, String email) {
         this.name = name;
@@ -80,7 +77,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority("user"));
     }
 
     @Override
