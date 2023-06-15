@@ -43,6 +43,9 @@ public class AuthenticationController {
     private UserService userService;
 
     private boolean isAlreadyAuthorized(HttpServletRequest request) {
+        if (request.getCookies() == null) {
+            return false;
+        }
         final String jwt = Arrays.stream(request.getCookies())
                 .filter(cookie -> cookie.getName().equalsIgnoreCase("jwtAccessToken"))
                 .findFirst().map(Cookie::getValue).orElse(null);
@@ -79,7 +82,6 @@ public class AuthenticationController {
         response.addCookie(cookie);
 
 
-
         return new ModelAndView("redirect:/user");
         //return ResponseEntity.ok(service.register(request));
     }
@@ -103,7 +105,7 @@ public class AuthenticationController {
             response.addCookie(cookie);
         } catch (UsernameNotFoundException | BadCredentialsException e) {
             System.out.println(e.getMessage());
-            return new ModelAndView("/login").addObject("message","incorrect username or password");
+            return new ModelAndView("/login").addObject("message", "incorrect username or password");
         }
         return new ModelAndView("redirect:/user");
     }
