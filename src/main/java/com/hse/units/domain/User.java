@@ -40,7 +40,6 @@ public class User implements UserDetails {
 
     private String password;
 
-
     public User(String name, String info, String email) {
         this.name = name;
         this.info = info;
