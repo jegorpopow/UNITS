@@ -39,9 +39,6 @@ public class User implements UserDetails {
     private String activationCode;
 
     private String password;
-    @Enumerated(EnumType.STRING)
-    private final Role role = Role.USER; // TODO: process Role
-
 
     public User(String name, String info, String email) {
         this.name = name;
