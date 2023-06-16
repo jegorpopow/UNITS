@@ -14,6 +14,12 @@ import java.util.Set;
 
 @Entity
 public class Task {
+    enum Level {
+        EASY,
+        MEDIUM,
+        HARD
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -106,5 +112,9 @@ public class Task {
 
     public boolean isCheckable() {
         return checkable;
+    }
+
+    public Level getLevel() {
+        return Level.EASY;
     }
 }
