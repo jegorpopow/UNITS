@@ -35,6 +35,14 @@ public class FormService {
         return responseRepository.findById(id);
     }
 
+    public List<Form> createdForms(long id) {
+        return formRepository.findByCreator(id);
+    }
+
+    public List<FormResponse> findByForm(Form form) {
+        return responseRepository.findByForm(form);
+    }
+
     public Form getFormByName(String name) {
         return formRepository.findFormByName(name);
     }
@@ -55,5 +63,6 @@ public class FormService {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         return this.formRepository.findAll(pageable);
     }
+
 
 }

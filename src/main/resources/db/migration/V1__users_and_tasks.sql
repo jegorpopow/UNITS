@@ -18,15 +18,14 @@ create table task
 
 create table users
 (
-    uid   bigint not null,
-    info  varchar(255),
-    name  varchar(255),
-    first_name varchar(255),
-    last_name varchar(255),
-    email varchar(255),
+    uid             bigint not null,
+    info            varchar(255),
+    name            varchar(255),
+    first_name      varchar(255),
+    last_name       varchar(255),
+    email           varchar(255),
     activation_code varchar(255),
-    password varchar(255),
-    role varchar(255),
+    password        varchar(255),
     primary key (uid)
 );
 

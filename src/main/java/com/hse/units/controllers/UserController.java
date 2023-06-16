@@ -1,7 +1,9 @@
 package com.hse.units.controllers;
 
+import com.hse.units.domain.Form;
 import com.hse.units.repos.UserRepository;
 import com.hse.units.domain.User;
+import com.hse.units.services.FormService;
 import com.hse.units.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -20,6 +23,9 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private FormService formService;
 
     @GetMapping("/user")
     public String user(Principal principal) {
@@ -34,6 +40,8 @@ public class UserController {
     public String userProfile(@PathVariable Long id, Model model) {
         User user = userService.getUserById(id);
         model.addAttribute("user", user);
+        List<Form> forms = formService.createdForms(id);
+        model.addAttribute("forms", forms);
         return "profile";
     }
 
@@ -45,7 +53,6 @@ public class UserController {
         } else {
             model.addAttribute("message", "Код активации не найден");
         }
-
         return "login";
     }
 }

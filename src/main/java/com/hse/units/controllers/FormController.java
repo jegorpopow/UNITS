@@ -137,6 +137,14 @@ public class FormController {
     }
 
 
+    @GetMapping("/form/{id}/responses")
+    public String formResponses(@PathVariable Long id, Model model) {
+        Form form = formService.getFormById(id);
+        List<FormResponse> responses = formService.findByForm(form);
+        model.addAttribute("responses", responses);
+        return "form_answers";
+    }
+
     @RequestMapping("/form/{id}")
     public String taskInfo(@PathVariable Long id, Model model) {
         ifAuthorized(model);
@@ -160,7 +168,7 @@ public class FormController {
             Model model) {
 
         ifAuthorized(model);
-       List<String> tags = Arrays.asList(tag1, tag2, tag3);
+        List<String> tags = Arrays.asList(tag1, tag2, tag3);
 
         Set<TaskTag> taskTags = new HashSet<>();
 
