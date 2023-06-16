@@ -1,19 +1,11 @@
 package com.hse.units;
 
-import com.hse.units.auth.AuthenticationService;
-import com.hse.units.auth.RegisterRequest;
-import com.hse.units.domain.Form;
-import com.hse.units.domain.TaskTag;
-import com.hse.units.repos.FormRepository;
-import com.hse.units.repos.TagRepository;
+import com.hse.units.domain.*;
+import com.hse.units.repos.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.hse.units.domain.Task;
-import com.hse.units.domain.User;
-import com.hse.units.repos.TaskRepository;
-import com.hse.units.repos.UserRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Set;
@@ -33,6 +25,8 @@ class DatabaseApplicationTests {
     @Autowired
     private TagRepository tagRepository;
 
+    @Autowired
+    private ProgressRepository progressRepository;
 
     @Autowired
     private AuthenticationService authenticationService;
@@ -55,8 +49,11 @@ class DatabaseApplicationTests {
             tagRepository.save(new TaskTag("good task", "just good task"));
         }
 
+
         User author = userRepository.findUserByName("author").orElseThrow(() -> new UsernameNotFoundException("User not found"));
         TaskTag tag = tagRepository.findByName("good task").get(0);
+
+        progressRepository.save(new PercentageOfProgress(tag, author));
 
         Task first_task = new Task("Zagadka", "some text", "otgadka", author.getUid(), true, true);
         first_task.addTag(tag);
