@@ -71,7 +71,7 @@ public class AuthenticationController {
     @PostMapping("/registration")
     public ModelAndView register(@RequestParam String username, @RequestParam String password,
                                  @RequestParam String firstName, @RequestParam String lastName,
-                                 @RequestParam String email, HttpServletResponse response) {
+                                 @RequestParam String email, HttpServletResponse response, Model model) {
         var get = authenticationService.register(new RegisterRequest(username, password, firstName, lastName, email));
         if (get == null) {
             return new ModelAndView("/registration").addObject("param", "error"); // todo
@@ -80,7 +80,6 @@ public class AuthenticationController {
         cookie.setAttribute("jwtRefreshToken", get.getRefreshToken());
         cookie.setMaxAge(60 * 60); // 1 hour
         response.addCookie(cookie);
-
 
         return new ModelAndView("redirect:/user");
         //return ResponseEntity.ok(service.register(request));

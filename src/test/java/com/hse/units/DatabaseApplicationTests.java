@@ -1,5 +1,7 @@
 package com.hse.units;
 
+import com.hse.units.auth.AuthenticationService;
+import com.hse.units.auth.RegisterRequest;
 import com.hse.units.domain.*;
 import com.hse.units.repos.*;
 import org.junit.jupiter.api.Assertions;

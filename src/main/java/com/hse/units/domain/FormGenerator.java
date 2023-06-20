@@ -25,7 +25,7 @@ public class FormGenerator {
         List<Task> tasks = taskRepository.findAll().stream()
                 .filter((Task t) -> !Collections.disjoint(t.getTags(), taskTag))
                 .limit(numberOfTask).collect(Collectors.toList());
-        Form form = new Form(tasks);
+        Form form = new Form(tasks, user.getUid());
         formService.addForm(form);
         return form;
     }

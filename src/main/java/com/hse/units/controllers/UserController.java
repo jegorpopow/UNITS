@@ -32,13 +32,13 @@ public class UserController {
         if (principal.getName() == null) {
             return "redirect:/login";
         }
-        Long userId = userService.findUserByUsername(principal.getName());
+        Long userId = userRepository.findByName(principal.getName()).get(0).getUid();
         return "redirect:/user/" + userId;
     }
 
     @GetMapping("/user/{id}")
     public String userProfile(@PathVariable Long id, Model model) {
-        User user = userService.getUserById(id);
+        User user = userRepository.findByUid(id);
         model.addAttribute("user", user);
         List<Form> forms = formService.createdForms(id);
         model.addAttribute("forms", forms);

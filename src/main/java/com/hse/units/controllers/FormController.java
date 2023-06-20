@@ -10,11 +10,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
@@ -87,10 +89,23 @@ public class FormController {
         }
     */
 
+
     @RequestMapping("/form_response/{id}")
     public String responseInfo(@PathVariable Long id, Model model) {
+        ifAuthorized(model);
+        String currentUsername = (String) model.getAttribute("user");
+
         FormResponse response = formService.getResponse(id);
         model.addAttribute("response", response);
+
+        Form form = response.getForm();
+        if (!userRepository.findByUid(form.getCreator()).getUsername().equals(currentUsername) ||
+            !response.getUser().getUsername().equals(currentUsername)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "you don't have access to this page"
+            );
+        }
+
 
         Map<Task, String> answers = new HashMap<>();
         Map<Task, Boolean> correctness = new HashMap<>();

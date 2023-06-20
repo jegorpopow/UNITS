@@ -70,6 +70,11 @@ public class Form {
         this.tasks = tasks;
     }
 
+    public Form(List<Task> tasks, Long creator) {
+        this.tasks = tasks;
+        this.creator = creator;
+    }
+
     public void addTask(Task task) {
         this.tasks.add(task);
     }

@@ -44,18 +44,9 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
-    public User getUserById(Long id) {
-
-        return new User("user", "password", null);
-    }
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return null;
-    }
-
-    public Long findUserByUsername(String name) {
-        return 1L;
     }
 
     public boolean activateUser(String code) {
