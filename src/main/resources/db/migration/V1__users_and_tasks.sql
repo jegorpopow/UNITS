@@ -26,6 +26,7 @@ create table users
     email           varchar(255),
     activation_code varchar(255),
     password        varchar(255),
+    available_forms varchar(1024),
     primary key (uid)
 );
 

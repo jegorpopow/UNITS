@@ -36,7 +36,7 @@ public class FormService {
     }
 
     public List<Form> createdForms(long id) {
-        return formRepository.findByCreator(id);
+        return formRepository.findByCreatorId(id);
     }
 
     public List<FormResponse> findByForm(Form form) {

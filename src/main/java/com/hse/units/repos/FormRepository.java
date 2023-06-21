@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FormRepository extends CrudRepository<Form, Long>, PagingAndSortingRepository<Form, Long> {
-    List<Form> findByCreator(long creator);
+    List<Form> findByCreatorId(long creatorId);
 
     Form findById(long id);
 

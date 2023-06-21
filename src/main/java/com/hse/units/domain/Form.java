@@ -1,9 +1,9 @@
 package com.hse.units.domain;
 
+import com.hse.units.repos.UserRepository;
 import jakarta.persistence.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = com.hse.units.domain.Form.TABLE_NAME)
@@ -28,7 +28,7 @@ public class Form {
 
     String info;
 
-    Long creator;
+    Long creatorId;
 
     boolean shuffled;
 
@@ -55,14 +55,14 @@ public class Form {
         return info;
     }
 
-    public Long getCreator() {
-        return creator;
+    public Long getCreatorId() {
+        return creatorId;
     }
 
-    public Form(String name, String info, Long creator, boolean shuffled) {
+    public Form(String name, String info, Long creatorId, boolean shuffled) {
         this.name = name;
         this.info = info;
-        this.creator = creator;
+        this.creatorId = creatorId;
         this.shuffled = shuffled;
     }
 
@@ -70,9 +70,9 @@ public class Form {
         this.tasks = tasks;
     }
 
-    public Form(List<Task> tasks, Long creator) {
+    public Form(List<Task> tasks, Long creatorId) {
         this.tasks = tasks;
-        this.creator = creator;
+        this.creatorId = creatorId;
     }
 
     public void addTask(Task task) {

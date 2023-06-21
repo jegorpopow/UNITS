@@ -3,8 +3,11 @@ package com.hse.units.controllers;
 import com.hse.units.domain.*;
 import com.hse.units.repos.*;
 import com.hse.units.services.FormService;
+import com.hse.units.services.UserService;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +25,6 @@ import java.util.*;
 
 @Controller
 public class FormController {
-
-    // TODO : auth
     @Autowired
     UserRepository userRepository;
 
@@ -41,12 +42,15 @@ public class FormController {
 
     private final FormService formService;
 
+    private final UserService userService;
+
     private final int PAGE_SIZE = 10;
 
     private FormGenerator formGenerator;
 
-    public FormController(FormService formService) {
+    public FormController(FormService formService, UserService userService) {
         this.formService = formService;
+        this.userService = userService;
     }
 
     @PostConstruct
@@ -99,7 +103,7 @@ public class FormController {
         model.addAttribute("response", response);
 
         Form form = response.getForm();
-        if (!userRepository.findByUid(form.getCreator()).getUsername().equals(currentUsername) ||
+        if (!userRepository.findByUid(form.getCreatorId()).getUsername().equals(currentUsername) ||
             !response.getUser().getUsername().equals(currentUsername)) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "you don't have access to this page"
@@ -165,6 +169,7 @@ public class FormController {
         ifAuthorized(model);
         Form form = formService.getFormById(id);
         model.addAttribute("form", form);
+        model.addAttribute("creatorUsername", userRepository.findByUid(form.getCreatorId()).getUsername());
         return "form";
     }
 
@@ -197,5 +202,11 @@ public class FormController {
         Form form = formGenerator.generate(user, numberOfTask, level, taskTags);
 
         return "redirect:/form/" + form.getId();
+    }
+
+    @PostMapping("/inviteStudent")
+    public String inviteStudent(@RequestParam("id") Long id, @RequestParam("username") String username, Model model) {
+        userService.addForm(id, username);
+        return "redirect:/user";
     }
 }

@@ -5,10 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -40,6 +42,8 @@ public class User implements UserDetails {
 
     private String password;
 
+    private String availableForms;
+
     public User(String name, String info, String email) {
         this.name = name;
         this.info = info;
@@ -67,12 +71,31 @@ public class User implements UserDetails {
         return email;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
     public String getActivationCode() {
         return activationCode;
     }
 
+    public String getAvailableForms() {
+        return availableForms;
+    }
+
     public void setActivationCode(String activationCode) {
         this.activationCode = activationCode;
+    }
+
+    public void addForm(Long id) {
+        if (availableForms == null) {
+            availableForms = "";
+        }
+        this.availableForms += id.toString() + " ";
     }
 
     @Override
@@ -89,6 +112,7 @@ public class User implements UserDetails {
     public String getUsername() {
         return name;
     }
+
 
     @Override
     public boolean isAccountNonExpired() {

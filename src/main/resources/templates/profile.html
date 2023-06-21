@@ -66,7 +66,8 @@
                                 <p class="mb-0">Полное имя</p>
                             </div>
                             <div class="col-sm-9">
-                                <p class="text-muted mb-0" th:text="${user.getName()}"> full name </p>
+                                <p class="text-muted mb-0"
+                                   th:text="${user.getFirstName()} + ' ' + ${user.getLastName()}"> full name </p>
                             </div>
                         </div>
                         <hr>
@@ -168,14 +169,13 @@
     <section class="py-5 text-center container">
         <div class="row py-lg-0">
             <div class="col-lg-6 col-md-8 mx-auto">
-                <h1 class="fw-light">Доступные тесты</h1>
+                <h1 class="fw-light">Созданные мной тесты</h1>
             </div>
         </div>
     </section>
 
 </section>
 <div class="container">
-
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         <div class="col" th:each="form : ${forms}">
             <div class="card shadow-sm">
@@ -196,14 +196,106 @@
                     <a th:href="@{/form/{id}/responses(id=${form.id})}" class="btn btn-lg btn-primary btn-block">
                         Answers
                     </a>
-                </div>
-                <div class="card-body">
-                    <p class="card-text" th:text="${form.info}"></p>
+
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-lg btn-primary btn-block" data-toggle="modal"
+                            th:attr="data-target='#inviteModal'+*{form.id}">
+                        Invite
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" th:id="*{'inviteModal'+form.id}" tabindex="-1" role="dialog"
+                         aria-labelledby="inviteModalTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="inviteModalTitle">Invite student</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/inviteStudent" method="post">
+                                        <div class="form-group">
+                                            <label>Form id</label> <input type="text"
+                                                                          th:value="*{form.id}" class="form-control"
+                                                                          name="id" readonly>
+                                            <label>Student's name</label> <input type="text"
+                                                                                 name="username" class="form-control">
+                                            <br>
+                                            <button type="submit" class="btn btn-primary">submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <p class="card-text" th:text="${form.info}"></p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<section class="py-5 text-center container">
+    <div class="row py-lg-0">
+        <div class="col-lg-6 col-md-8 mx-auto">
+            <h1 class="fw-light">Доступные для решения тесты</h1>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        <div class="col" th:each="form : ${formsToSolve}">
+            <div class="card shadow-sm">
+                <!--
+                <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
+                     xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
+                     preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+                    <rect width="100%" height="100%" fill="#55595c"></rect>
+                    <text x="50%" y="50%" fill="#eceeef" dy=".3em"> Добивим возможность вставлять картинки?
+                    </text>
+                </svg>
+                -->
+                <div class="card-header justify-content-between align-items-center">
+                    <p class="center" th:text="${form.name}"></p>
+                    <a th:href="@{/form/{id}(id=${form.id})}" class="btn btn-lg btn-primary btn-block">
+                        Solve
+                    </a>
+                    <a th:href="@{/form_response/{id}(id=${form.id})}" class="btn btn-lg btn-primary btn-block">
+                        Response
+                    </a>
+                    <div class="card-body">
+                        <p class="card-text" th:text="${form.info}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+<script src=”https://code.jquery.com/jquery-3.2.1.slim.min.js”
+        integrity=”sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN”
+        crossorigin=”anonymous”></script>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js
+        integrity=”sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q”
+        crossorigin=”anonymous”></script>
+<script src=”https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js”
+        integrity=”sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl”
+        crossorigin=”anonymous”></script>
 
 </body>
 </html>

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -42,6 +43,9 @@ public class UserController {
         model.addAttribute("user", user);
         List<Form> forms = formService.createdForms(id);
         model.addAttribute("forms", forms);
+        List<Form> formsToSolve = Arrays.stream(user.getAvailableForms().split(" "))
+                .map(s -> formService.getFormById(Long.parseLong(s))).toList();
+        model.addAttribute("formsToSolve", formsToSolve);
         return "profile";
     }
 

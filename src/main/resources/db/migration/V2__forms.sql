@@ -10,7 +10,7 @@ create table form_contains
 create table forms
 (
     id       bigint  not null,
-    creator  bigint,
+    creator_id  bigint,
     info     varchar(255),
     name     varchar(255),
     shuffled boolean not null,

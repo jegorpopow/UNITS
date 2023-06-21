@@ -59,4 +59,10 @@ public class UserService implements UserDetailsService {
 
         return true;
     }
+
+    public void addForm(Long formId, String username) {
+        User user = userRepository.findUserByName(username).orElseThrow();
+        user.addForm(formId);
+        userRepository.save(user);
+    }
 }
