@@ -42,7 +42,7 @@ public class AuthenticationController {
     @Autowired
     private UserService userService;
 
-    private boolean isAlreadyAuthorized(HttpServletRequest request) {
+    public boolean isAlreadyAuthorized(HttpServletRequest request) {
         if (request.getCookies() == null) {
             return false;
         }

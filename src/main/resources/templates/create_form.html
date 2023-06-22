@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Создание теста</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<h1>Создание теста:</h1>
+<form>
+    <div id="tasks-container">
+        <div class="task" id="task-1" >
+            <h3>Задание 1:</h3>
+            <label for="type-1">Тип задания:</label>
+            <select id="type-1" onchange="showFields(1)">
+                <option value="1">Задание типа 1</option>
+                <option value="2">Задание типа 2</option>
+                <option value="3">Задание типа 3</option>
+            </select>
+            <div id="task-data-1">
+                <input type='text' name='question' value=''><br>
+            </div>
+        </div>
+    </div>
+    <button type="button" id="add-task">Добавить задание</button>
+    <button type="submit">Создать тест</button>
+</form>
+
+<script>
+    function showFields(taskNum) {
+        var dropdown = document.getElementById("type-" + taskNum);
+        var value = dropdown.options[dropdown.selectedIndex].value;
+        var taskData = document.getElementById("task-data-" + taskNum);
+        taskData.innerHTML = "";
+        // В зависимости от выбранного типа задачи делаем тело вопроса
+        if (value == 1) {
+            taskData.innerHTML = "<input type='text' name='question' value=''><br>";
+        } else if (value == 2) {
+            taskData.innerHTML = "<input type='text' name='question' value=''><br>"
+                + "<input type='text' name='answer' value=''><br>";
+        } else {
+            taskData.innerHTML = "<input type='text' name='question' value=''><br>"
+                + "<input type='radio' name='answer' value='1'> Вариант 1<br>"
+                + "<input type='radio' name='answer' value='2'> Вариант 2<br>"
+                + "<input type='radio' name='answer' value='3'> Вариант 3<br>";
+        }
+    }
+</script>
+
+<script>
+    var tasksCount = 1;
+    var tasksContainer = document.getElementById('tasks-container');
+    var addButton = document.getElementById('add-task');
+    addButton.addEventListener('click', function() {
+        var task = document.createElement('div');
+        task.id = 'task-' + (++tasksCount);
+        task.className = 'task';
+        task.innerHTML = '<h3>Задание ' + tasksCount + ':</h3>' +
+            '<label for="type-' + tasksCount + '">Тип задания:</label>' +
+            '<select id="type-' + tasksCount + '" onchange="showFields(' + tasksCount + ')">' +
+            '<option value="1">Задание типа 1</option>' +
+            '<option value="2">Задание типа 2</option>' +
+            '<option value="3">Задание типа 3</option>' +
+            '</select>' +
+            '<div id="task-data-' + tasksCount + '">' +
+            '<input type=\'text\' name=\'question\' value=\'\'><br>' +
+            '</div>';
+
+        tasksContainer.appendChild(task);
+    });
+
+    // Добавьте обработчик событий для изменения содержимого .task-data в каждом задании при изменении типа задания
+</script>
+</body>
+</html>

@@ -209,4 +209,9 @@ public class FormController {
         userService.addForm(id, username);
         return "redirect:/user";
     }
+
+    @GetMapping("/create_form")
+    public String createForm() {
+        return "create_form";
+    }
 }
