@@ -42,6 +42,7 @@ public class AuthenticationService {
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
+                .availableForms("")
                 .build();
 
         if (!userService.createUser(user)) {

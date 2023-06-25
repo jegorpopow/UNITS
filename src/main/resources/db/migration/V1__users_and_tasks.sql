@@ -13,6 +13,10 @@ create table task
     standalone boolean not null,
     checkable  boolean not null,
     title      varchar(255),
+    task_type  varchar(255),
+    correct_choice integer,
+    correct_choices varchar(255),
+    options varchar(255),
     primary key (id)
 );
 

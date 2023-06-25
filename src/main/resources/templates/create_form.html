@@ -7,23 +7,28 @@
 </head>
 <body>
 <h1>Создание теста:</h1>
-<form>
+<form method="post">
+    <label for="title">Название теста:</label>
+    <input type='text' name='title' id='title' value=''><br><br>
+    <label for="info">Описание теста:</label>
+    <input type='text' name='info' id='info' value=''><br>
     <div id="tasks-container">
-        <div class="task" id="task-1" >
+        <div class="task" id="task-1">
             <h3>Задание 1:</h3>
             <label for="type-1">Тип задания:</label>
-            <select id="type-1" onchange="showFields(1)">
-                <option value="1">Задание типа 1</option>
-                <option value="2">Задание типа 2</option>
-                <option value="3">Задание типа 3</option>
+            <select id="type-1" name="type-1" onchange="showFields(1)">
+                <option value="1">Plain text</option>
+                <option value="2">Single choice</option>
+                <option value="3">Multiple choice</option>
             </select>
             <div id="task-data-1">
-                <input type='text' name='question' value=''><br>
+                <input type='text' name='question-1' value=''><br>
+                <input type='text' name='field-1' value=''><br>
             </div>
         </div>
     </div>
     <button type="button" id="add-task">Добавить задание</button>
-    <button type="submit">Создать тест</button>
+    <button type="submit" id="create-test">Создать тест</button>
 </form>
 
 <script>
@@ -34,15 +39,18 @@
         taskData.innerHTML = "";
         // В зависимости от выбранного типа задачи делаем тело вопроса
         if (value == 1) {
-            taskData.innerHTML = "<input type='text' name='question' value=''><br>";
+            taskData.innerHTML = "<input type='text' name='question-" + taskNum + "' value=''><br>"
+                + "<input type='text' name='field-" + taskNum + "' value=''><br>";
         } else if (value == 2) {
-            taskData.innerHTML = "<input type='text' name='question' value=''><br>"
-                + "<input type='text' name='answer' value=''><br>";
+            taskData.innerHTML = "<input type='text' name='question-" + taskNum + "' value=''><br>"
+                + "<input type='radio' name='answer-" + taskNum + "' value='1'> <input type='text' name='option-" + taskNum + "-1' value=''> <br>"
+                + "<input type='radio' name='answer-" + taskNum + "' value='2'> <input type='text' name='option-" + taskNum + "-2' value=''> <br>"
+                + "<input type='radio' name='answer-" + taskNum + "' value='3'> <input type='text' name='option-" + taskNum + "-3' value=''> <br>";
         } else {
-            taskData.innerHTML = "<input type='text' name='question' value=''><br>"
-                + "<input type='radio' name='answer' value='1'> Вариант 1<br>"
-                + "<input type='radio' name='answer' value='2'> Вариант 2<br>"
-                + "<input type='radio' name='answer' value='3'> Вариант 3<br>";
+            taskData.innerHTML = "<input type='text' name='question-" + taskNum + "' value=''><br>"
+                + "<input type='checkbox' name='answer-" + taskNum + "-1' value='1'> <input type='text' name='option-" + taskNum + "-1' value=''> <br>"
+                + "<input type='checkbox' name='answer-" + taskNum + "-2' value='2'> <input type='text' name='option-" + taskNum + "-2' value=''> <br>"
+                + "<input type='checkbox' name='answer-" + taskNum + "-3' value='3'> <input type='text' name='option-" + taskNum + "-3' value=''> <br>";
         }
     }
 </script>
@@ -57,17 +65,20 @@
         task.className = 'task';
         task.innerHTML = '<h3>Задание ' + tasksCount + ':</h3>' +
             '<label for="type-' + tasksCount + '">Тип задания:</label>' +
-            '<select id="type-' + tasksCount + '" onchange="showFields(' + tasksCount + ')">' +
-            '<option value="1">Задание типа 1</option>' +
-            '<option value="2">Задание типа 2</option>' +
-            '<option value="3">Задание типа 3</option>' +
+            '<select id="type-' + tasksCount + '" name="type-' + tasksCount + '" onchange="showFields(' + tasksCount + ')">' +
+                '<option value="1">Plain text</option>' +
+                '<option value="2">Single choice</option>' +
+                '<option value="3">Multiple choice</option>' +
             '</select>' +
             '<div id="task-data-' + tasksCount + '">' +
-            '<input type=\'text\' name=\'question\' value=\'\'><br>' +
+            '<input type=\'text\' name=\'question-' + tasksCount + '\' value=\'\'><br>' +
+            '<input type=\'text\' name=\'field-' + tasksCount + '\' value=\'\'><br>' +
             '</div>';
 
         tasksContainer.appendChild(task);
     });
+
+
 
     // Добавьте обработчик событий для изменения содержимого .task-data в каждом задании при изменении типа задания
 </script>

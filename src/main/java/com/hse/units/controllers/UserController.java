@@ -43,9 +43,11 @@ public class UserController {
         model.addAttribute("user", user);
         List<Form> forms = formService.createdForms(id);
         model.addAttribute("forms", forms);
-        List<Form> formsToSolve = Arrays.stream(user.getAvailableForms().split(" "))
-                .map(s -> formService.getFormById(Long.parseLong(s))).toList();
-        model.addAttribute("formsToSolve", formsToSolve);
+        if (!user.getAvailableForms().equals("")) {
+            List<Form> formsToSolve = Arrays.stream(user.getAvailableForms().split(" "))
+                    .map(s -> formService.getFormById(Long.parseLong(s))).toList();
+            model.addAttribute("formsToSolve", formsToSolve);
+        }
         return "profile";
     }
 

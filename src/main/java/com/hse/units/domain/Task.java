@@ -13,6 +13,8 @@ import java.util.Set;
  * */
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "TaskType")
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,6 +27,9 @@ public class Task {
     boolean checkable;
 
     private boolean standalone;
+
+    //@Enumerated(EnumType.STRING)
+    //private TaskType taskType;
 
     protected Task() {
     }

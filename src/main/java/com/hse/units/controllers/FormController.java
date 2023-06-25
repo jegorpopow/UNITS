@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.json.*;
 
 import java.util.*;
 
@@ -104,7 +105,7 @@ public class FormController {
 
         Form form = response.getForm();
         if (!userRepository.findByUid(form.getCreatorId()).getUsername().equals(currentUsername) ||
-            !response.getUser().getUsername().equals(currentUsername)) {
+                !response.getUser().getUsername().equals(currentUsername)) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "you don't have access to this page"
             );
@@ -213,5 +214,59 @@ public class FormController {
     @GetMapping("/create_form")
     public String createForm() {
         return "create_form";
+    }
+
+    @PostMapping("/create_form")
+    public String getCreatedForm(HttpServletRequest request, Model model) {
+        ifAuthorized(model);
+        String currentUsername = (String) model.getAttribute("user");
+        long authorId = userRepository.findUserByName(currentUsername).orElseThrow().getUid();
+
+        ArrayList<String> parameters = Collections.list(request.getParameterNames());
+        Form form = new Form(request.getParameter(parameters.get(0)),
+                request.getParameter(parameters.get(1)), authorId, false);
+        int n = parameters.size();
+        for (int i = 2; i < n; ) {
+            String type = request.getParameter(parameters.get(i));
+            i++;
+            String question = request.getParameter(parameters.get(i));
+            i++;
+            switch (type) {
+                case "1" -> { // Plain text
+                    String answer = request.getParameter(parameters.get(i));
+                    i++;
+                    form.addTask(new Task(question, "", answer, authorId, false, true));
+                }
+                case "2" -> { // Single choice
+                    int answer = -1;
+                    JSONObject options = new JSONObject();
+                    for (; i < n && !(parameters.get(i).startsWith("type")); ++i) {
+                        if (parameters.get(i).startsWith("answer")) {
+                            answer = Integer.parseInt(request.getParameter(parameters.get(i)));
+                        } else {
+                            options.append("options", request.getParameter(parameters.get(i)));
+                        }
+                    }
+                    form.addTask(new SingleChoiceTask(question, "", null, authorId, false, true, answer, options.toString()));
+                }
+                case "3" -> { // Multi choice
+                    StringBuilder answer = new StringBuilder();
+                    JSONObject options = new JSONObject();
+                    for (; i < n && !(parameters.get(i).startsWith("type")); ++i) {
+                        if (parameters.get(i).startsWith("answer")) {
+                            answer.append(request.getParameter(parameters.get(i)));
+                            answer.append(" ");
+                        } else {
+                            options.append("options", request.getParameter(parameters.get(i)));
+                        }
+                    }
+                    form.addTask(new MultiChoiceTask(question, "", null, authorId, false, true, answer.toString(), options.toString()));
+                }
+                default -> throw new RuntimeException("Invalid type of task");
+            }
+        }
+        formService.addForm(form);
+
+        return "redirect:/user";
     }
 }

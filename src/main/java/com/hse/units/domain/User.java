@@ -42,7 +42,7 @@ public class User implements UserDetails {
 
     private String password;
 
-    private String availableForms;
+    private String availableForms = "";
 
     public User(String name, String info, String email) {
         this.name = name;

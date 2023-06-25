@@ -2,11 +2,13 @@ package com.hse.units.domain;
 
 import com.hse.units.repos.UserRepository;
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 
 import java.util.*;
 
 @Entity
 @Table(name = com.hse.units.domain.Form.TABLE_NAME)
+@NoArgsConstructor
 public class Form {
     public static final String TABLE_NAME = "forms";
 
@@ -31,9 +33,6 @@ public class Form {
     Long creatorId;
 
     boolean shuffled;
-
-    protected Form() {
-    }
 
     public Long getId() {
         return id;

@@ -24,6 +24,7 @@ dependencies {
     implementation("org.webjars:webjars-locator:0.30")
     implementation("org.webjars:font-awesome:6.3.0")
     implementation("org.webjars:popper.js:2.9.3")
+    implementation("org.json:json:20230618")
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
     implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
