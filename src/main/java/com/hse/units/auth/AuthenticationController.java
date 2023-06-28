@@ -111,7 +111,6 @@ public class AuthenticationController {
 
     @GetMapping("/logoutdone")
     public String logout(/*HttpServletRequest request*/) {
-        System.out.println("In logout mapping");
         return "redirect:/";
     }
 }

@@ -16,6 +16,12 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "TaskType")
 public class Task {
+    enum Level {
+        EASY,
+        MEDIUM,
+        HARD
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -129,5 +135,9 @@ public class Task {
         } else {
             return "regular";
         }
+    }
+
+    public Level getLevel() {
+        return Level.EASY;
     }
 }
