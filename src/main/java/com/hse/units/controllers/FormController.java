@@ -41,6 +41,9 @@ public class FormController {
     @Autowired
     TagRepository tagRepository;
 
+    @Autowired
+    ProgressRepository progressRepository;
+
     private final FormService formService;
 
     private final UserService userService;
@@ -161,6 +164,11 @@ public class FormController {
 
             if (rawAnswer != null && !rawAnswer.equals("")) {
                 Answer answer = new Answer(user, task, rawAnswer);
+                for (var tag : task.getTags()) {
+                    PercentageOfProgress progress = progressRepository.findByUserAndTag(user, tag)
+                            .orElse(progressRepository.save(new PercentageOfProgress(tag, user)));
+                    progress.update(task, answer.getResult());
+                }
                 answerRepository.save(answer);
                 response.addAnswer(answer);
             }
@@ -240,7 +248,6 @@ public class FormController {
         ArrayList<String> parameters = Collections.list(request.getParameterNames());
         Form form = new Form(request.getParameter(parameters.get(0)),
                 request.getParameter(parameters.get(1)), authorId, false, request.getParameter(parameters.get(2)));
-        System.out.println(parameters);
         int n = parameters.size();
         for (int i = 3; i < n; ) {
             String type = request.getParameter(parameters.get(i));
@@ -251,24 +258,42 @@ public class FormController {
                 case "1" -> { // Plain text
                     String answer = request.getParameter(parameters.get(i));
                     i++;
-                    form.addTask(new Task(question, "", answer, authorId, false, true));
+                    Task task = new Task(question, "", answer, authorId, false, true);
+                    for (; i < n && parameters.get(i).startsWith("tag"); ++i) {
+                        String tagName = request.getParameter(parameters.get(i));
+                        if (tagRepository.existsTagByName(tagName)) {
+                            task.addTag(tagRepository.findByName(tagName).get(0));
+                        } else {
+                            task.addTag(tagRepository.save(new TaskTag(tagName, "")));
+                        }
+                    }
+                    form.addTask(task);
                 }
                 case "2" -> { // Single choice
                     int answer = -1;
                     JSONObject options = new JSONObject();
-                    for (; i < n && !(parameters.get(i).startsWith("type")); ++i) {
+                    for (; i < n && (parameters.get(i).startsWith("answer") || parameters.get(i).startsWith("option")); ++i) {
                         if (parameters.get(i).startsWith("answer")) {
                             answer = Integer.parseInt(request.getParameter(parameters.get(i)));
                         } else {
                             options.append("options", request.getParameter(parameters.get(i)));
                         }
                     }
-                    form.addTask(new SingleChoiceTask(question, "", null, authorId, false, true, answer, options.toString()));
+                    SingleChoiceTask task = new SingleChoiceTask(question, "", null, authorId, false, true, answer, options.toString());
+                    for (; i < n && parameters.get(i).startsWith("tag"); ++i) {
+                        String tagName = request.getParameter(parameters.get(i));
+                        if (tagRepository.existsTagByName(tagName)) {
+                            task.addTag(tagRepository.findByName(tagName).get(0));
+                        } else {
+                            task.addTag(tagRepository.save(new TaskTag(tagName, "")));
+                        }
+                    }
+                    form.addTask(task);
                 }
                 case "3" -> { // Multi choice
                     StringBuilder answer = new StringBuilder();
                     JSONObject options = new JSONObject();
-                    for (; i < n && !(parameters.get(i).startsWith("type")); ++i) {
+                    for (; i < n && (parameters.get(i).startsWith("answer") || parameters.get(i).startsWith("option")); ++i) {
                         if (parameters.get(i).startsWith("answer")) {
                             answer.append(request.getParameter(parameters.get(i)));
                             answer.append(" ");
@@ -276,7 +301,16 @@ public class FormController {
                             options.append("options", request.getParameter(parameters.get(i)));
                         }
                     }
-                    form.addTask(new MultiChoiceTask(question, "", null, authorId, false, true, answer.toString(), options.toString()));
+                    MultiChoiceTask task = new MultiChoiceTask(question, "", null, authorId, false, true, answer.toString(), options.toString());
+                    for (; i < n && parameters.get(i).startsWith("tag"); ++i) {
+                        String tagName = request.getParameter(parameters.get(i));
+                        if (tagRepository.existsTagByName(tagName)) {
+                            task.addTag(tagRepository.findByName(tagName).get(0));
+                        } else {
+                            task.addTag(tagRepository.save(new TaskTag(tagName, "")));
+                        }
+                    }
+                    form.addTask(task);
                 }
                 default -> throw new RuntimeException("Invalid type of task");
             }

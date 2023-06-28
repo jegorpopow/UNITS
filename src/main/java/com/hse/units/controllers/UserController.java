@@ -1,6 +1,8 @@
 package com.hse.units.controllers;
 
 import com.hse.units.domain.Form;
+import com.hse.units.domain.PercentageOfProgress;
+import com.hse.units.repos.ProgressRepository;
 import com.hse.units.repos.UserRepository;
 import com.hse.units.domain.User;
 import com.hse.units.services.FormService;
@@ -15,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class UserController {
@@ -27,6 +31,9 @@ public class UserController {
 
     @Autowired
     private FormService formService;
+
+    @Autowired
+    private ProgressRepository progressRepository;
 
     @GetMapping("/user")
     public String user(Principal principal) {
@@ -48,6 +55,11 @@ public class UserController {
                     .map(s -> formService.getFormById(Long.parseLong(s))).toList();
             model.addAttribute("formsToSolve", formsToSolve);
         }
+        List<PercentageOfProgress> tags = progressRepository.findByUser(user).stream()
+                .sorted((t1, t2) -> t2.getPercent().compareTo(t1.getPercent()))
+                .limit(5)
+                .toList();
+        model.addAttribute("tags", tags);
         return "profile";
     }
 

@@ -3,16 +3,22 @@ package com.hse.units.domain;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 @Table(name = PercentageOfProgress.TABLE_NAME)
 @AllArgsConstructor
 public class PercentageOfProgress {
     static public final String TABLE_NAME = "progress";
 
-    private int easy = 0;
-    private int medium = 0;
-    private int hard = 0;
+    private int solvedEasy = 0;
+    private int solvedMedium = 0;
+    private int solvedHard = 0;
+    private int totalEasy = 0;
+    private int totalMedium = 0;
+    private int totalHard = 0;
     @Id
     @GeneratedValue
     private Long id;
@@ -39,25 +45,50 @@ public class PercentageOfProgress {
 
     @ManyToOne
     private User user;
-
-    public int getEasy() {
-        return easy;
+    public void update(Task task, boolean wasSolved) {
+        switch (task.getLevel()) {
+            case EASY -> {
+                totalEasy++;
+                if (wasSolved) {
+                    solvedEasy++;
+                }
+            }
+            case MEDIUM -> {
+                totalMedium++;
+                if (wasSolved) {
+                    solvedMedium++;
+                }
+            }
+            case HARD -> {
+                totalHard++;
+                if (wasSolved) {
+                    solvedHard++;
+                }
+            }
+        }
     }
 
-    public int getMedium() {
-        return medium;
+    public Double getPercent() {
+        int solved = solvedEasy + solvedMedium + solvedHard;
+        int total = totalEasy + totalMedium + totalHard;
+        return calculatePercentage(solved, total);
     }
 
-    public int getHard() {
-        return hard;
+    public Double getPercentOfEasy() {
+        return calculatePercentage(solvedEasy, totalEasy);
     }
 
-    public TaskTag getTag() {
-        return tag;
+    public Double getPercentOfMedium() {
+        return calculatePercentage(solvedMedium, totalMedium);
     }
 
-    public User getUser() {
-        return user;
+    public Double getPercentOfHard() {
+        return calculatePercentage(solvedHard, totalHard);
     }
+
+    private Double calculatePercentage(double solved, double total) {
+        return solved * 100 / total;
+    }
+
 }
 
