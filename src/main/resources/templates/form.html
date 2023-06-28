@@ -25,7 +25,14 @@
     <div class="container">
         <div class="row row-cols-1 g-3">
             <div class="col" th:each="task : ${form.tasks}">
-                <div th:replace="blocks/inner_task :: inner-task"></div>
+
+
+                <div th:switch="${task.getType()}">
+                    <div th:case="'regular'" th:insert="blocks/inner_task :: inner-task"></div>
+                    <div th:case="'multi'" th:insert="blocks/check :: inner-task"></div>
+                    <div th:case="'single'" th:insert="blocks/radio :: inner-task"></div>
+                </div>
+
             </div>
         </div>
     </div>

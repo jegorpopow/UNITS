@@ -104,7 +104,7 @@ public class FormController {
         model.addAttribute("response", response);
 
         Form form = response.getForm();
-        if (!userRepository.findByUid(form.getCreatorId()).getUsername().equals(currentUsername) ||
+        if (!userRepository.findByUid(form.getCreatorId()).getUsername().equals(currentUsername) &&
                 !response.getUser().getUsername().equals(currentUsername)) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "you don't have access to this page"
@@ -142,7 +142,21 @@ public class FormController {
         FormResponse response = new FormResponse(user, form);
 
         for (Task task : form.getTasks()) {
-            String rawAnswer = request.getParameter("task" + task.getId().toString());
+            String rawAnswer;
+
+            if (task.getType().equals("multi")) {
+                StringJoiner joiner = new StringJoiner(" ");
+                List<String> parameterNames = Collections.list(request.getParameterNames());
+                for (String parameter : parameterNames) {
+                    if (parameter.startsWith("task" + task.getId())) {
+                        joiner.add(request.getParameter(parameter));
+                    }
+                }
+                rawAnswer = joiner.toString();
+            } else {
+                rawAnswer = request.getParameter("task" + task.getId().toString());
+            }
+
 
             if (rawAnswer != null && !rawAnswer.equals("")) {
                 Answer answer = new Answer(user, task, rawAnswer);

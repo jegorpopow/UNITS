@@ -101,6 +101,14 @@ public class Task {
         return tags;
     }
 
+    public MultiChoiceTask getMultiChoice() {
+        return (MultiChoiceTask) this;
+    }
+
+    public SingleChoiceTask getSingleChoice() {
+        return (SingleChoiceTask) this;
+    }
+
     public boolean isStandalone() {
         return standalone;
     }
@@ -111,5 +119,15 @@ public class Task {
 
     public boolean isCheckable() {
         return checkable;
+    }
+
+    public String getType() {
+        if (this instanceof MultiChoiceTask) {
+            return "multi";
+        } else if (this instanceof SingleChoiceTask) {
+            return "single";
+        } else {
+            return "regular";
+        }
     }
 }

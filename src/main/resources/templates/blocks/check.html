@@ -9,10 +9,21 @@
                     Подробнее
                 </a>
             </div>
-            <div class="btn-group">
-                <input type="text" th:form="${'form' + form.id}" th:name="${'task' + task.id}"/>
+
+            <div>
+                <div class="form-check" th:each="option, iter : ${task.getMultiChoice().separatedOptions()}">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           th:form="${'form' + form.id}"
+                           th:value="${iter.index + 1}"
+                           th:id="${'task' + task.id + option}"
+                           th:name="${'task' + task.id + '_' + (iter.index + 1)}">
+                    <label class="form-check-label" th:for="${'task' + task.id + option}" th:text="${option}">
+                    </label>
+                </div>
             </div>
-            <small class="text-muted">Content isn't created by UNITS</small>
+
+            <small class="text-muted"> Content isn't created by UNITS </small>
         </div>
         <div class="card-footer">
             <a type="button" class="btn btn-sm btn-outline-secondary" th:each="tag : ${task.tags}">
