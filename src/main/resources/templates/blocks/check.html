@@ -9,7 +9,7 @@
                     Подробнее
                 </a>
             </div>
-
+            <span th:text="${task.body}"></span>
             <div>
                 <div class="form-check" th:each="option, iter : ${task.getMultiChoice().separatedOptions()}">
                     <input class="form-check-input"
