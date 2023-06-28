@@ -69,5 +69,13 @@ public class FormResponse {
     public Date getTimestamp() {
         return timestamp;
     }
+
+    public long getCorrect() {
+        return answers.stream().filter(Answer::getResult).count();
+    }
+
+    public long getTotal() {
+        return form.getTasks().size();
+    }
 }
 
