@@ -44,6 +44,6 @@ public class SingleChoiceTask extends Task {
 
     @Override
     public boolean checkCorrectness(String receivedAnswer) {
-        return this.separatedOptions().get(correctChoice).equals(receivedAnswer);
+        return this.separatedOptions().get(correctChoice - 1).equals(receivedAnswer);
     }
 }
