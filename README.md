@@ -18,7 +18,7 @@ UNITS требует работы с базой данных PostgreSQL.
 в файле `application.properties` среди ресурсов :
 
 ```toml
-spring.datasource.url = ...
-spring.datasource.username = ...
-spring.datasource.password = ....
+spring.datasource.url = ___
+spring.datasource.username = ___
+spring.datasource.password = ___
 ```
