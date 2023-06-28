@@ -68,7 +68,8 @@ public class FormController {
     @GetMapping("/forms")
     public String tasks(Model model, @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         ifAuthorized(model);
-        model.addAttribute("forms", formService.getForms());
+        model.addAttribute("forms", formService.getForms().stream()
+                .filter(form -> form.getPrivacy().equals("OPEN")));
         return findPaginated(1, model);
     }
 
@@ -238,9 +239,10 @@ public class FormController {
 
         ArrayList<String> parameters = Collections.list(request.getParameterNames());
         Form form = new Form(request.getParameter(parameters.get(0)),
-                request.getParameter(parameters.get(1)), authorId, false);
+                request.getParameter(parameters.get(1)), authorId, false, request.getParameter(parameters.get(2)));
+        System.out.println(parameters);
         int n = parameters.size();
-        for (int i = 2; i < n; ) {
+        for (int i = 3; i < n; ) {
             String type = request.getParameter(parameters.get(i));
             i++;
             String question = request.getParameter(parameters.get(i));

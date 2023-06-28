@@ -14,6 +14,7 @@ create table forms
     info     varchar(255),
     name     varchar(255),
     shuffled boolean not null,
+    privacy varchar(255),
     primary key (id)
 );
 

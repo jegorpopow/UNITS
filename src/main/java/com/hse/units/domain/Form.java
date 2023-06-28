@@ -34,6 +34,15 @@ public class Form {
 
     boolean shuffled;
 
+    enum FormPrivacy {
+        OPEN,
+        INVITE,
+        CLOSE
+    }
+
+    @Enumerated(EnumType.STRING)
+    private FormPrivacy privacy;
+
     public Long getId() {
         return id;
     }
@@ -58,11 +67,16 @@ public class Form {
         return creatorId;
     }
 
-    public Form(String name, String info, Long creatorId, boolean shuffled) {
+    public String getPrivacy() {
+        return privacy.toString();
+    }
+
+    public Form(String name, String info, Long creatorId, boolean shuffled, String privacy) {
         this.name = name;
         this.info = info;
         this.creatorId = creatorId;
         this.shuffled = shuffled;
+        this.privacy = FormPrivacy.values()[Integer.parseInt(privacy)];
     }
 
     public Form(List<Task> tasks) {
